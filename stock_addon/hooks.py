@@ -122,6 +122,14 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
+
+doc_events = {
+    "Purchase Receipt": {
+        "on_submit": "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.on_submit"
+    }
+}
+
+
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
