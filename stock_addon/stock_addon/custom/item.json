@@ -11,6 +11,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-07-30 20:50:58.969902",
    "default": null,
    "depends_on": null,
@@ -138,6 +139,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:14.274014",
+=======
+   "creation": "2024-09-02 13:36:17.935589",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -146,32 +150,52 @@
    "fetch_from": null,
    "fetch_if_empty": 0,
    "fieldname": "custom_article",
+<<<<<<< HEAD
    "fieldtype": "Data",
+=======
+   "fieldtype": "Link",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 45,
+=======
+   "idx": 33,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_micron",
+=======
+   "insert_after": "custom_design",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Article",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:14.274014",
+=======
+   "modified": "2024-09-02 13:36:17.935589",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_article",
    "no_copy": 0,
    "non_negative": 0,
+<<<<<<< HEAD
    "options": null,
+=======
+   "options": "Stitching Article",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "owner": "Administrator",
    "permlevel": 0,
    "precision": "",
@@ -185,7 +209,11 @@
    "search_index": 0,
    "show_dashboard": 0,
    "sort_options": 0,
+<<<<<<< HEAD
    "translatable": 1,
+=======
+   "translatable": 0,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "unique": 0,
    "width": null
   },
@@ -197,10 +225,17 @@
    "allow_in_quick_entry": 0,
    "allow_on_submit": 0,
    "bold": 0,
+<<<<<<< HEAD
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:10.733069",
+=======
+   "collapsible": 1,
+   "collapsible_depends_on": null,
+   "columns": 0,
+   "creation": "2024-09-02 13:36:15.690970",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -214,7 +249,11 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 31,
+=======
+   "idx": 27,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -228,7 +267,11 @@
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:10.733069",
+=======
+   "modified": "2024-09-02 13:36:15.690970",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_attribute_information",
@@ -263,7 +306,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:13.257294",
+=======
+   "creation": "2024-09-02 13:36:19.112750",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -271,19 +318,29 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_color",
    "fieldtype": "Data",
+=======
+   "fieldname": "custom_colour",
+   "fieldtype": "Link",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 41,
+=======
+   "idx": 37,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_finished_item",
    "is_system_generated": 0,
    "is_virtual": 0,
@@ -361,6 +418,22 @@
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
+=======
+   "insert_after": "custom_column_break_rsztg",
+   "is_system_generated": 0,
+   "is_virtual": 0,
+   "label": "Colour",
+   "length": 0,
+   "link_filters": null,
+   "mandatory_depends_on": null,
+   "modified": "2024-09-02 13:36:19.112750",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_colour",
+   "no_copy": 0,
+   "non_negative": 0,
+   "options": "Item Colour",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "owner": "Administrator",
    "permlevel": 0,
    "precision": "",
@@ -389,7 +462,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:55:48.033324",
+=======
+   "creation": "2024-09-02 13:04:09.909187",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -397,12 +474,17 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_column_break_8akmx",
+=======
+   "fieldname": "custom_column_break_83mqp",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Column Break",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 61,
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
@@ -530,6 +612,9 @@
    "hide_days": 0,
    "hide_seconds": 0,
    "idx": 21,
+=======
+   "idx": 23,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -543,10 +628,17 @@
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:34:27.279857",
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_column_break_guokb",
+=======
+   "modified": "2024-09-02 13:04:09.909187",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_column_break_83mqp",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -578,7 +670,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:55:47.426382",
+=======
+   "creation": "2024-09-02 13:36:17.225098",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -586,30 +682,49 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_column_break_h0prx",
+=======
+   "fieldname": "custom_column_break_jcjsf",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Column Break",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 58,
+=======
+   "idx": 31,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_description1",
+=======
+   "insert_after": "custom_ply",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:55:47.426382",
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_column_break_h0prx",
+=======
+   "modified": "2024-09-02 13:36:17.225098",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_column_break_jcjsf",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -641,7 +756,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:14.517076",
+=======
+   "creation": "2024-09-02 13:36:18.841293",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -649,30 +768,49 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_column_break_hce0b",
+=======
+   "fieldname": "custom_column_break_rsztg",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Column Break",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 46,
+=======
+   "idx": 36,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_article",
+=======
+   "insert_after": "custom_printdyed_",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:14.517076",
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_column_break_hce0b",
+=======
+   "modified": "2024-09-02 13:36:18.841293",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_column_break_rsztg",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -704,7 +842,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-07-30 20:50:59.228244",
+=======
+   "creation": "2024-09-02 13:04:09.140097",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -712,30 +854,49 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_column_break_kksf0",
+=======
+   "fieldname": "custom_column_break_uca3m",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Column Break",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 95,
+=======
+   "idx": 20,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_20__container_26_cbm",
+=======
+   "insert_after": "standard_rate",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-07-30 20:50:59.228244",
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_column_break_kksf0",
+=======
+   "modified": "2024-09-02 13:04:09.140097",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_column_break_uca3m",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -767,7 +928,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:12.495744",
+=======
+   "creation": "2024-09-02 13:04:10.308639",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -775,13 +940,84 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_column_break_r2gt5",
+=======
+   "fieldname": "custom_column_break_yycmi",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Column Break",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 38,
+=======
+   "idx": 25,
+   "ignore_user_permissions": 0,
+   "ignore_xss_filter": 0,
+   "in_global_search": 0,
+   "in_list_view": 0,
+   "in_preview": 0,
+   "in_standard_filter": 0,
+   "insert_after": "is_stock_item",
+   "is_system_generated": 0,
+   "is_virtual": 0,
+   "label": "",
+   "length": 0,
+   "link_filters": null,
+   "mandatory_depends_on": null,
+   "modified": "2024-09-02 13:04:10.308639",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_column_break_yycmi",
+   "no_copy": 0,
+   "non_negative": 0,
+   "options": null,
+   "owner": "Administrator",
+   "permlevel": 0,
+   "precision": "",
+   "print_hide": 0,
+   "print_hide_if_no_value": 0,
+   "print_width": null,
+   "read_only": 0,
+   "read_only_depends_on": null,
+   "report_hide": 0,
+   "reqd": 0,
+   "search_index": 0,
+   "show_dashboard": 0,
+   "sort_options": 0,
+   "translatable": 0,
+   "unique": 0,
+   "width": null
+  },
+  {
+   "_assign": null,
+   "_comments": null,
+   "_liked_by": null,
+   "_user_tags": null,
+   "allow_in_quick_entry": 0,
+   "allow_on_submit": 0,
+   "bold": 0,
+   "collapsible": 0,
+   "collapsible_depends_on": null,
+   "columns": 0,
+   "creation": "2024-09-02 13:36:20.214589",
+   "default": null,
+   "depends_on": null,
+   "description": null,
+   "docstatus": 0,
+   "dt": "Item",
+   "fetch_from": null,
+   "fetch_if_empty": 0,
+   "fieldname": "custom_column_break_zjbrp",
+   "fieldtype": "Column Break",
+   "hidden": 0,
+   "hide_border": 0,
+   "hide_days": 0,
+   "hide_seconds": 0,
+   "idx": 41,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -795,10 +1031,17 @@
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:12.495744",
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_column_break_r2gt5",
+=======
+   "modified": "2024-09-02 13:36:20.214589",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_column_break_zjbrp",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -830,6 +1073,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:51:08.831678",
    "default": null,
    "depends_on": null,
@@ -1209,6 +1453,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:14.763356",
+=======
+   "creation": "2024-09-02 13:36:17.601083",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -1217,31 +1464,48 @@
    "fetch_from": null,
    "fetch_if_empty": 0,
    "fieldname": "custom_design",
+<<<<<<< HEAD
    "fieldtype": "Data",
+=======
+   "fieldtype": "Link",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 47,
+=======
+   "idx": 32,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_column_break_hce0b",
+=======
+   "insert_after": "custom_column_break_jcjsf",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Design",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:14.763356",
+=======
+   "modified": "2024-09-02 13:36:17.601083",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_design",
    "no_copy": 0,
    "non_negative": 0,
+<<<<<<< HEAD
    "options": null,
    "owner": "Administrator",
    "permlevel": 0,
@@ -1369,6 +1633,9 @@
    "no_copy": 0,
    "non_negative": 0,
    "options": "Ean Code",
+=======
+   "options": "Stitching Design",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "owner": "Administrator",
    "permlevel": 0,
    "precision": "",
@@ -1397,7 +1664,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:13.010048",
+=======
+   "creation": "2024-09-02 13:36:18.269509",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -1411,21 +1682,33 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 40,
+=======
+   "idx": 34,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_item_quality",
+=======
+   "insert_after": "custom_article",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Finished Item",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:13.010048",
+=======
+   "modified": "2024-09-02 13:36:18.269509",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_finished_item",
@@ -1460,6 +1743,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 12:22:20.405242",
    "default": null,
    "depends_on": null,
@@ -1587,6 +1871,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:11.702748",
+=======
+   "creation": "2024-09-02 13:36:20.457860",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -1595,26 +1882,42 @@
    "fetch_from": null,
    "fetch_if_empty": 0,
    "fieldname": "custom_gsm",
+<<<<<<< HEAD
    "fieldtype": "Data",
+=======
+   "fieldtype": "Select",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 35,
+=======
+   "idx": 42,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_column_break_22ed6",
+=======
+   "insert_after": "custom_column_break_zjbrp",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "GSM",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:11.702748",
+=======
+   "modified": "2024-09-02 13:36:20.457860",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_gsm",
@@ -1649,6 +1952,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:51:08.529521",
    "default": null,
    "depends_on": null,
@@ -1776,6 +2080,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:34:27.526246",
+=======
+   "creation": "2024-09-02 13:04:09.511175",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -1796,14 +2103,22 @@
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_column_break_guokb",
+=======
+   "insert_after": "custom_column_break_uca3m",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Item Category",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:34:27.526246",
+=======
+   "modified": "2024-09-02 13:04:09.511175",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_item_category",
@@ -1838,6 +2153,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:15.632693",
    "default": "",
    "depends_on": null,
@@ -1902,6 +2218,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:15.353571",
+=======
+   "creation": "2024-09-02 13:36:19.384653",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -1909,6 +2228,7 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_item_information",
    "fieldtype": "Section Break",
    "hidden": 0,
@@ -2036,18 +2356,26 @@
    "fetch_from": null,
    "fetch_if_empty": 0,
    "fieldname": "custom_item_quality",
+=======
+   "fieldname": "custom_item_quantity",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Data",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 39,
+=======
+   "idx": 38,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_column_break_r2gt5",
    "is_system_generated": 0,
    "is_virtual": 0,
@@ -2059,6 +2387,19 @@
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_item_quality",
+=======
+   "insert_after": "custom_colour",
+   "is_system_generated": 0,
+   "is_virtual": 0,
+   "label": "Item Quantity",
+   "length": 0,
+   "link_filters": null,
+   "mandatory_depends_on": null,
+   "modified": "2024-09-02 13:36:19.384653",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_item_quantity",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -2090,6 +2431,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 12:04:57.085766",
    "default": null,
    "depends_on": null,
@@ -2217,6 +2559,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:13.729541",
+=======
+   "creation": "2024-09-02 13:36:16.433131",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -2230,21 +2575,33 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 43,
+=======
+   "idx": 29,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_column_break_vvqcv",
+=======
+   "insert_after": "custom_size",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Length",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:13.729541",
+=======
+   "modified": "2024-09-02 13:36:16.433131",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_length",
@@ -2279,7 +2636,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:14.023564",
+=======
+   "creation": "2024-09-02 13:36:19.685188",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -2293,21 +2654,33 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 44,
+=======
+   "idx": 39,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_length",
+=======
+   "insert_after": "custom_item_quantity",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Micron",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:14.023564",
+=======
+   "modified": "2024-09-02 13:36:19.685188",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_micron",
@@ -2342,6 +2715,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:34:26.976098",
    "default": null,
    "depends_on": null,
@@ -2595,6 +2969,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:15.033457",
+=======
+   "creation": "2024-09-02 13:36:16.867149",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -2608,21 +2985,33 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 48,
+=======
+   "idx": 30,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_design",
+=======
+   "insert_after": "custom_length",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Ply",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:15.033457",
+=======
+   "modified": "2024-09-02 13:36:16.867149",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_ply",
@@ -2657,7 +3046,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:43:11.253117",
+=======
+   "creation": "2024-09-02 13:36:18.535133",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -2665,19 +3058,28 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_printdyed",
+=======
+   "fieldname": "custom_printdyed_",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "fieldtype": "Data",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 33,
+=======
+   "idx": 35,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_size",
    "is_system_generated": 0,
    "is_virtual": 0,
@@ -2689,6 +3091,19 @@
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_printdyed",
+=======
+   "insert_after": "custom_finished_item",
+   "is_system_generated": 0,
+   "is_virtual": 0,
+   "label": "Print/Dyed ",
+   "length": 0,
+   "link_filters": null,
+   "mandatory_depends_on": null,
+   "modified": "2024-09-02 13:36:18.535133",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_printdyed_",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -2720,7 +3135,11 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-07-30 19:55:30.599195",
+=======
+   "creation": "2024-09-02 13:04:08.777400",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -2728,6 +3147,7 @@
    "dt": "Item",
    "fetch_from": null,
    "fetch_if_empty": 0,
+<<<<<<< HEAD
    "fieldname": "custom_product_code",
    "fieldtype": "Data",
    "hidden": 0,
@@ -2924,23 +3344,43 @@
    "hide_days": 0,
    "hide_seconds": 0,
    "idx": 2,
+=======
+   "fieldname": "custom_section_break_eqdrr",
+   "fieldtype": "Section Break",
+   "hidden": 0,
+   "hide_border": 0,
+   "hide_days": 0,
+   "hide_seconds": 0,
+   "idx": 17,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "details",
+=======
+   "insert_after": "image",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 12:25:28.301337",
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_section_break_bhnek",
+=======
+   "modified": "2024-09-02 13:04:08.777400",
+   "modified_by": "Administrator",
+   "module": null,
+   "name": "Item-custom_section_break_eqdrr",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "no_copy": 0,
    "non_negative": 0,
    "options": null,
@@ -2972,6 +3412,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-07-31 02:23:02.436019",
    "default": "03 Years",
    "depends_on": null,
@@ -3036,6 +3477,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:11.021521",
+=======
+   "creation": "2024-09-02 13:36:16.108651",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -3044,12 +3488,20 @@
    "fetch_from": null,
    "fetch_if_empty": 0,
    "fieldname": "custom_size",
+<<<<<<< HEAD
    "fieldtype": "Data",
+=======
+   "fieldtype": "Link",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 32,
+=======
+   "idx": 28,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
@@ -3063,12 +3515,17 @@
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:11.021521",
+=======
+   "modified": "2024-09-02 13:36:16.108651",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_size",
    "no_copy": 0,
    "non_negative": 0,
+<<<<<<< HEAD
    "options": null,
    "owner": "Administrator",
    "permlevel": 0,
@@ -3133,6 +3590,9 @@
    "no_copy": 0,
    "non_negative": 0,
    "options": "Supplier No",
+=======
+   "options": "Attribute Size",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "owner": "Administrator",
    "permlevel": 0,
    "precision": "",
@@ -3161,6 +3621,7 @@
    "collapsible": 0,
    "collapsible_depends_on": null,
    "columns": 0,
+<<<<<<< HEAD
    "creation": "2024-07-30 20:44:40.927316",
    "default": null,
    "depends_on": null,
@@ -3288,6 +3749,9 @@
    "collapsible_depends_on": null,
    "columns": 0,
    "creation": "2024-09-13 11:43:12.230565",
+=======
+   "creation": "2024-09-02 13:36:19.919835",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default": null,
    "depends_on": null,
    "description": null,
@@ -3301,21 +3765,33 @@
    "hide_border": 0,
    "hide_days": 0,
    "hide_seconds": 0,
+<<<<<<< HEAD
    "idx": 37,
+=======
+   "idx": 40,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "ignore_user_permissions": 0,
    "ignore_xss_filter": 0,
    "in_global_search": 0,
    "in_list_view": 0,
    "in_preview": 0,
    "in_standard_filter": 0,
+<<<<<<< HEAD
    "insert_after": "custom_discription",
+=======
+   "insert_after": "custom_micron",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "is_system_generated": 0,
    "is_virtual": 0,
    "label": "Width",
    "length": 0,
    "link_filters": null,
    "mandatory_depends_on": null,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:43:12.230565",
+=======
+   "modified": "2024-09-02 13:36:19.919835",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-custom_width",
@@ -3349,7 +3825,11 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2024-07-30 19:25:59.226739",
+=======
+   "creation": "2024-08-24 14:36:55.132403",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item",
    "docstatus": 0,
@@ -3357,7 +3837,11 @@
    "field_name": "barcodes",
    "idx": 0,
    "is_system_generated": 1,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:22:59.104674",
+=======
+   "modified": "2024-08-24 14:36:55.132403",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-barcodes-hidden",
@@ -3372,7 +3856,11 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2024-07-30 19:25:59.079785",
+=======
+   "creation": "2024-08-24 14:36:54.955005",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item",
    "docstatus": 0,
@@ -3380,7 +3868,11 @@
    "field_name": "item_code",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:22:59.418741",
+=======
+   "modified": "2024-08-24 14:36:54.955005",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-item_code-hidden",
@@ -3395,7 +3887,11 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2024-07-30 19:25:59.093583",
+=======
+   "creation": "2024-08-24 14:36:54.971624",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item",
    "docstatus": 0,
@@ -3403,7 +3899,11 @@
    "field_name": "item_code",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:22:59.439467",
+=======
+   "modified": "2024-08-24 14:36:54.971624",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-item_code-reqd",
@@ -3418,7 +3918,11 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2024-09-13 12:30:42.029613",
+=======
+   "creation": "2024-09-02 13:36:15.260918",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item",
    "docstatus": 0,
@@ -3426,7 +3930,11 @@
    "field_name": null,
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2024-09-13 12:30:42.029613",
+=======
+   "modified": "2024-09-02 13:36:15.260918",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-main-field_order",
@@ -3434,13 +3942,18 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
+<<<<<<< HEAD
    "value": "[\"details\", \"custom_section_break_bhnek\", \"naming_series\", \"item_code\", \"custom_product_code\", \"custom_hs_code\", \"column_break0\", \"allow_alternative_item\", \"opening_stock\", \"is_fixed_asset\", \"auto_create_assets\", \"is_grouped_asset\", \"asset_category\", \"asset_naming_series\", \"over_delivery_receipt_allowance\", \"over_billing_allowance\", \"image\", \"custom_name_and_attribute\", \"item_name\", \"valuation_rate\", \"custom_column_break_guokb\", \"custom_item_category\", \"standard_rate\", \"custom_column_break_d3ve1\", \"item_group\", \"is_stock_item\", \"has_variants\", \"disabled\", \"custom_column_break_ysmuo\", \"stock_uom\", \"custom_attribute_information\", \"custom_size\", \"custom_printdyed\", \"custom_column_break_22ed6\", \"custom_gsm\", \"custom_discription\", \"custom_width\", \"custom_column_break_r2gt5\", \"custom_item_quality\", \"custom_finished_item\", \"custom_color\", \"custom_column_break_vvqcv\", \"custom_length\", \"custom_micron\", \"custom_article\", \"custom_column_break_hce0b\", \"custom_design\", \"custom_ply\", \"custom_item_information\", \"custom_item_dimensions\", \"custom_item_quality1\", \"custom_column_break_wcsok\", \"custom_gusset\", \"custom_qty__ctn\", \"custom_column_break_tq6ew\", \"custom_ean_code\", \"custom_description1\", \"custom_column_break_h0prx\", \"custom_supplier_no\", \"custom_gross_wt\", \"custom_column_break_8akmx\", \"brand\", \"custom_finished_size\", \"section_break_11\", \"description\", \"custom_product_ingredient\", \"unit_of_measure_conversion\", \"uoms\", \"variants_section\", \"variant_of\", \"variant_based_on\", \"attributes\", \"dashboard_tab\", \"inventory_section\", \"inventory_settings_section\", \"shelf_life_in_days\", \"end_of_life\", \"default_material_request_type\", \"valuation_method\", \"custom_shelf_life_in_years\", \"column_break1\", \"warranty_period\", \"weight_per_unit\", \"weight_uom\", \"allow_negative_stock\", \"custom_item_packing\", \"custom_packaging_detail\", \"custom_weight_net_kgs\", \"custom_packaging_weight_kgs\", \"custom_weight_gross_kgs\", \"custom_lbs\", \"custom_oz\", \"custom_container_details\", \"custom_20__container_26_cbm\", \"custom_column_break_kksf0\", \"custom_40_hc_container__56_cbm\", \"sb_barcodes\", \"barcodes\", \"reorder_section\", \"reorder_levels\", \"serial_nos_and_batches\", \"has_batch_no\", \"create_new_batch\", \"batch_number_series\", \"has_expiry_date\", \"retain_sample\", \"sample_quantity\", \"column_break_37\", \"has_serial_no\", \"serial_no_series\", \"accounting\", \"deferred_accounting_section\", \"enable_deferred_expense\", \"no_of_months_exp\", \"column_break_9s9o\", \"enable_deferred_revenue\", \"no_of_months\", \"section_break_avcp\", \"item_defaults\", \"purchasing_tab\", \"purchase_uom\", \"min_order_qty\", \"safety_stock\", \"is_purchase_item\", \"purchase_details_cb\", \"lead_time_days\", \"last_purchase_rate\", \"is_customer_provided_item\", \"customer\", \"supplier_details\", \"delivered_by_supplier\", \"column_break2\", \"supplier_items\", \"foreign_trade_details\", \"country_of_origin\", \"column_break_59\", \"customs_tariff_number\", \"sales_details\", \"sales_uom\", \"grant_commission\", \"is_sales_item\", \"column_break3\", \"max_discount\", \"customer_details\", \"customer_items\", \"item_tax_section_break\", \"taxes\", \"quality_tab\", \"inspection_required_before_purchase\", \"quality_inspection_template\", \"inspection_required_before_delivery\", \"manufacturing\", \"include_item_in_manufacturing\", \"is_sub_contracted_item\", \"default_bom\", \"column_break_74\", \"customer_code\", \"default_item_manufacturer\", \"default_manufacturer_part_no\", \"total_projected_qty\"]"
+=======
+   "value": "[\"details\", \"naming_series\", \"item_name\", \"column_break0\", \"disabled\", \"allow_alternative_item\", \"has_variants\", \"opening_stock\", \"is_fixed_asset\", \"auto_create_assets\", \"is_grouped_asset\", \"asset_category\", \"asset_naming_series\", \"over_delivery_receipt_allowance\", \"over_billing_allowance\", \"image\", \"custom_section_break_eqdrr\", \"item_group\", \"standard_rate\", \"custom_column_break_uca3m\", \"custom_item_category\", \"valuation_rate\", \"custom_column_break_83mqp\", \"item_code\", \"is_stock_item\", \"custom_column_break_yycmi\", \"stock_uom\", \"attribute_information_section\", \"size\", \"length\", \"ply\", \"column_break_uihh\", \"design\", \"article\", \"finished_item\", \"printdyed\", \"column_break_ayhu\", \"colour\", \"item_quantity\", \"micron\", \"width\", \"column_break_ivpr\", \"gsm\", \"section_break_11\", \"description\", \"brand\", \"unit_of_measure_conversion\", \"uoms\", \"dashboard_tab\", \"inventory_section\", \"inventory_settings_section\", \"shelf_life_in_days\", \"end_of_life\", \"default_material_request_type\", \"valuation_method\", \"column_break1\", \"warranty_period\", \"weight_per_unit\", \"weight_uom\", \"allow_negative_stock\", \"sb_barcodes\", \"barcodes\", \"reorder_section\", \"reorder_levels\", \"serial_nos_and_batches\", \"has_batch_no\", \"create_new_batch\", \"batch_number_series\", \"has_expiry_date\", \"retain_sample\", \"sample_quantity\", \"column_break_37\", \"has_serial_no\", \"serial_no_series\", \"variants_section\", \"variant_of\", \"variant_based_on\", \"attributes\", \"accounting\", \"deferred_accounting_section\", \"enable_deferred_expense\", \"no_of_months_exp\", \"column_break_9s9o\", \"enable_deferred_revenue\", \"no_of_months\", \"section_break_avcp\", \"item_defaults\", \"purchasing_tab\", \"purchase_uom\", \"min_order_qty\", \"safety_stock\", \"is_purchase_item\", \"purchase_details_cb\", \"lead_time_days\", \"last_purchase_rate\", \"is_customer_provided_item\", \"customer\", \"supplier_details\", \"delivered_by_supplier\", \"column_break2\", \"supplier_items\", \"foreign_trade_details\", \"country_of_origin\", \"column_break_59\", \"customs_tariff_number\", \"sales_details\", \"sales_uom\", \"grant_commission\", \"is_sales_item\", \"column_break3\", \"max_discount\", \"customer_details\", \"customer_items\", \"item_tax_section_break\", \"taxes\", \"quality_tab\", \"inspection_required_before_purchase\", \"quality_inspection_template\", \"inspection_required_before_delivery\", \"manufacturing\", \"include_item_in_manufacturing\", \"is_sub_contracted_item\", \"default_bom\", \"column_break_74\", \"customer_code\", \"default_item_manufacturer\", \"default_manufacturer_part_no\", \"total_projected_qty\"]"
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
   },
   {
    "_assign": null,
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2024-09-13 11:34:26.688277",
    "default_value": null,
    "doc_type": "Item",
@@ -3465,6 +3978,9 @@
    "_liked_by": null,
    "_user_tags": null,
    "creation": "2024-07-30 19:25:59.064570",
+=======
+   "creation": "2024-08-24 14:36:54.938323",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item",
    "docstatus": 0,
@@ -3472,7 +3988,11 @@
    "field_name": "naming_series",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:22:59.472252",
+=======
+   "modified": "2024-08-24 14:36:54.938323",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-naming_series-hidden",
@@ -3487,7 +4007,11 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
+<<<<<<< HEAD
    "creation": "2024-07-30 19:25:58.778589",
+=======
+   "creation": "2024-08-24 14:36:54.601798",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item",
    "docstatus": 0,
@@ -3495,7 +4019,11 @@
    "field_name": "naming_series",
    "idx": 0,
    "is_system_generated": 0,
+<<<<<<< HEAD
    "modified": "2024-09-13 11:22:59.487430",
+=======
+   "modified": "2024-08-24 14:36:54.601798",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item-naming_series-reqd",
@@ -3504,6 +4032,7 @@
    "property_type": "Check",
    "row_name": null,
    "value": "0"
+<<<<<<< HEAD
   },
   {
    "_assign": null,
@@ -3550,6 +4079,8 @@
    "property_type": "Check",
    "row_name": null,
    "value": "1"
+=======
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
   }
  ],
  "sync_on_migrate": 1

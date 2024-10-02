@@ -2,7 +2,11 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:l_x_w_x_h",
+<<<<<<< HEAD
  "creation": "2024-09-13 11:42:08.222271",
+=======
+ "creation": "2024-10-02 14:09:34.692208",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -18,7 +22,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-13 11:42:41.393467",
+=======
+ "modified": "2024-10-02 14:10:20.166329",
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
  "modified_by": "Administrator",
  "module": "Stock Addon",
  "name": "LWH",
@@ -38,6 +46,10 @@
    "write": 1
   }
  ],
+<<<<<<< HEAD
+=======
+ "quick_entry": 1,
+>>>>>>> 2bd9fd9 (feat: doctype base for item created)
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
