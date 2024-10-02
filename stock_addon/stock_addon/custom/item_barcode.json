@@ -9,11 +9,7 @@
    "_comments": null,
    "_liked_by": null,
    "_user_tags": null,
-<<<<<<< HEAD
-   "creation": "2024-07-30 19:25:59.151464",
-=======
    "creation": "2024-08-24 14:36:55.040243",
->>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "default_value": null,
    "doc_type": "Item Barcode",
    "docstatus": 0,
@@ -21,11 +17,7 @@
    "field_name": "barcode",
    "idx": 0,
    "is_system_generated": 1,
-<<<<<<< HEAD
-   "modified": "2024-09-13 11:23:00.136185",
-=======
    "modified": "2024-08-24 14:36:55.040243",
->>>>>>> 2bd9fd9 (feat: doctype base for item created)
    "modified_by": "Administrator",
    "module": null,
    "name": "Item Barcode-barcode-hidden",
