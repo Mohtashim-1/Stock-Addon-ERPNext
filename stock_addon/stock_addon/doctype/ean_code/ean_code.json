@@ -2,7 +2,11 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:ean_code",
+<<<<<<< HEAD
  "creation": "2024-09-13 11:50:10.658525",
+=======
+ "creation": "2024-10-02 14:23:11.775128",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -12,13 +16,21 @@
   {
    "fieldname": "ean_code",
    "fieldtype": "Data",
+<<<<<<< HEAD
    "label": "EAN CODE",
+=======
+   "label": "Ean Code",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
    "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-13 11:50:43.400143",
+=======
+ "modified": "2024-10-02 14:23:43.719648",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "modified_by": "Administrator",
  "module": "Stock Addon",
  "name": "Ean Code",
@@ -38,6 +50,10 @@
    "write": 1
   }
  ],
+<<<<<<< HEAD
+=======
+ "quick_entry": 1,
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

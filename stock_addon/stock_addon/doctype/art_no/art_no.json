@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+<<<<<<< HEAD
  "autoname": "field:art_no",
  "creation": "2024-09-13 11:52:10.980520",
  "doctype": "DocType",
@@ -14,15 +15,34 @@
    "fieldtype": "Data",
    "label": "Art No",
    "unique": 1
+=======
+ "creation": "2024-10-02 14:24:21.002052",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_pgw2"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_pgw2",
+   "fieldtype": "Section Break"
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-13 11:52:41.298732",
  "modified_by": "Administrator",
  "module": "Stock Addon",
  "name": "Art No",
  "naming_rule": "By fieldname",
+=======
+ "modified": "2024-10-02 14:24:21.002052",
+ "modified_by": "Administrator",
+ "module": "Stock Addon",
+ "name": "Art No",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "owner": "Administrator",
  "permissions": [
   {
@@ -40,8 +60,12 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+<<<<<<< HEAD
  "states": [],
  "track_changes": 1,
  "track_seen": 1,
  "track_views": 1
+=======
+ "states": []
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
 }

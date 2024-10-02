@@ -2,7 +2,11 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:qty_ctn",
+<<<<<<< HEAD
  "creation": "2024-09-13 12:17:09.638281",
+=======
+ "creation": "2024-10-02 14:36:10.108634",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -12,13 +16,21 @@
   {
    "fieldname": "qty_ctn",
    "fieldtype": "Data",
+<<<<<<< HEAD
    "label": "Qty / Ctn",
+=======
+   "label": "Qty Ctn",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
    "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-13 12:18:42.348625",
+=======
+ "modified": "2024-10-02 14:36:49.826195",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "modified_by": "Administrator",
  "module": "Stock Addon",
  "name": "Qty Ctn",
@@ -38,6 +50,10 @@
    "write": 1
   }
  ],
+<<<<<<< HEAD
+=======
+ "quick_entry": 1,
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

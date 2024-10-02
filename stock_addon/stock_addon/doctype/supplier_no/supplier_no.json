@@ -2,7 +2,11 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:supplier_no",
+<<<<<<< HEAD
  "creation": "2024-09-13 11:54:28.325214",
+=======
+ "creation": "2024-10-02 14:25:18.728991",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -18,7 +22,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-13 11:54:59.849839",
+=======
+ "modified": "2024-10-02 14:25:54.438120",
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "modified_by": "Administrator",
  "module": "Stock Addon",
  "name": "Supplier No",
@@ -38,6 +46,10 @@
    "write": 1
   }
  ],
+<<<<<<< HEAD
+=======
+ "quick_entry": 1,
+>>>>>>> 29aeab3 (chore: add field and create doctypes for item)
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
