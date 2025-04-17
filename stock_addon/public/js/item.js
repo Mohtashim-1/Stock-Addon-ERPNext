@@ -374,3 +374,18 @@ frappe.ui.form.on('Item', {
 });
 
 
+// capitalize item code and item name 
+
+
+frappe.ui.form.on('Item', {
+    validate: function(frm) {
+        if (frm.doc.item_name) {
+            frm.set_value('item_name', frm.doc.item_name.toUpperCase());
+        }
+        if (frm.doc.item_code) {
+            frm.set_value('item_code', frm.doc.item_code.toUpperCase());
+        }
+    }
+});
+
+
