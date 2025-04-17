@@ -1,6 +1,6 @@
 ## Stock Addon
 
-custom app for stock addon
+app for stock addon customization
 
 #### License
 

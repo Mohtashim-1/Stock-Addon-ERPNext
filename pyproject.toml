@@ -3,7 +3,7 @@ name = "stock_addon"
 authors = [
     { name = "mohtashim", email = "shoaibmohtashim973@gmail.com"}
 ]
-description = "custom app for stock addon"
+description = "app for stock addon customization"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]

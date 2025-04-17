@@ -1,7 +1,7 @@
 app_name = "stock_addon"
 app_title = "Stock Addon"
 app_publisher = "mohtashim"
-app_description = "custom app for stock addon"
+app_description = "app for stock addon customization"
 app_email = "shoaibmohtashim973@gmail.com"
 app_license = "mit"
 # required_apps = []
@@ -121,14 +121,6 @@ app_license = "mit"
 # Document Events
 # ---------------
 # Hook on document methods and events
-
-
-doc_events = {
-    "Purchase Receipt": {
-        "on_submit": "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.on_submit"
-    }
-}
-
 
 # doc_events = {
 # 	"*": {
