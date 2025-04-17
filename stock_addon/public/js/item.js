@@ -114,3 +114,39 @@ frappe.listview_settings['Item'] = {
         });
     }
 };
+
+
+// filter item group based on item category
+
+frappe.ui.form.on('Item', {
+    setup: function(frm) {
+        frm.set_query('item_group', function() {
+            if (!frm.doc.custom_item_category) {
+                frappe.msgprint({
+                    message: '⚠️ <b>Please select an Item Category first.</b>',
+                    indicator: 'orange'
+                });
+                return { filters: { name: '' } };  // Prevent selection
+            }
+            return {
+                filters: {
+                    custom_item_category: frm.doc.custom_item_category  // Filter dynamically
+                }
+            };
+        });
+    },
+
+    custom_item_category: function(frm) {
+        if (!frm.doc.custom_item_category) {
+            frm.set_value('item_group', '');  // Clear Item Group if no category is selected
+        } else {
+            frm.set_query('item_group', function() {  // Apply filter dynamically
+                return {
+                    filters: {
+                        custom_item_category: frm.doc.custom_item_category
+                    }
+                };
+            });
+        }
+    }
+});
