@@ -4,4 +4,4 @@ app for stock addon customization
 
 #### License
 
-mit
+mit# SAH-Stock-Addon
