@@ -124,13 +124,12 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+    "Purchase Receipt": {
+        # "validate": "stock_addon.stock_addon.api.get_last_purchase_details_custom",
+        "on_submit": "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_lc",
+    }
+}
 
 # Scheduled Tasks
 # ---------------
