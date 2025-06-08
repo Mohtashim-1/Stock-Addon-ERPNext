@@ -10,7 +10,6 @@ def on_submit(self, method):
     
 def create_lc(doc, method):
     if doc.custom_create_landed_cost_ == "Yes":
-        if doc.docstatus == 1:
             lc = frappe.new_doc("Landed Cost Voucher")
             
             # Append a new Purchase Receipt row to the Landed Cost Voucher
@@ -28,3 +27,4 @@ def create_lc(doc, method):
             
             # Save the Landed Cost Voucher
             lc.save()
+        
