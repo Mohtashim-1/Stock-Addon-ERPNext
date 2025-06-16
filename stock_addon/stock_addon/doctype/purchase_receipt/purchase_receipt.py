@@ -33,7 +33,7 @@ def create_lc(doc, method):
 @frappe.whitelist()
 def create_outward_gate_pass_from_purchase_receipt(doc, method):
     if doc.docstatus == 1 and doc.is_return == 1:
-        frappe.msgprint("Purchase Receipt is submitted")
+        frappe.msgprint("Purchase Return is submitted")
         frappe.msgprint("Creating Outward Gate Pass")
         # Create the Outward Gate Pass document
         ogp = frappe.get_doc({
