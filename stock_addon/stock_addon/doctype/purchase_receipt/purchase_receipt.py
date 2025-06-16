@@ -1,5 +1,6 @@
 import frappe
 from frappe.model.document import Document
+from frappe.utils import now_datetime
 
 # def on_submit(self):
 #     self.create_lc()
@@ -28,3 +29,35 @@ def create_lc(doc, method):
             # Save the Landed Cost Voucher
             lc.save()
         
+# create outward gate pass from purchase receipt when stock is returned
+@frappe.whitelist()
+def create_outward_gate_pass_from_purchase_receipt(doc, method):
+    if doc.docstatus == 1 and doc.is_return == 1:
+        frappe.msgprint("Purchase Receipt is submitted")
+        frappe.msgprint("Creating Outward Gate Pass")
+        # Create the Outward Gate Pass document
+        ogp = frappe.get_doc({
+            "doctype": "Outward Gate Pass",
+            "ogp_type": "Non-Inventory",
+            "type": "Non-Returnable",
+            "out_to": "Supplier",
+            "document":"Purchase Receipt",
+            "voucher": doc.name,
+            "supplier": doc.supplier,
+            "vehicle_number": "",
+            "driver_name": "",
+            "driver_contact": "",
+            "non_inventory": [],
+            "creation_date": now_datetime()
+        })
+
+        # Add items from Delivery Note to the child table
+        for item in doc.items:
+            ogp.append("non_inventory", {
+                "item": item.item_code,
+                "qty": abs(item.qty),
+                "uom": item.uom
+            })
+
+        ogp.insert()
+        frappe.msgprint("Outward Gate Pass created")

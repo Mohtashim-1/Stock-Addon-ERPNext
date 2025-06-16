@@ -127,7 +127,10 @@ doctype_js = {
 doc_events = {
     "Purchase Receipt": {
         # "validate": "stock_addon.stock_addon.api.get_last_purchase_details_custom",
-        "on_submit": "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_lc",
+        "on_submit": [
+            "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_lc",
+            "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_outward_gate_pass_from_purchase_receipt",
+        ],
     },
     "Delivery Note": {
         "on_submit": "stock_addon.stock_addon.doctype.delivery_note.delivery_note.create_outward_gate_pass_from_delivery_note",
