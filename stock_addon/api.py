@@ -2,7 +2,6 @@ import frappe
 
 @frappe.whitelist()
 def create_lc(doc, method):
-    frappe.msgprint("12")
     frappe.log_error(f"LC Triggered: {doc.name}, Flag: {doc.custom_create_landed_cost_}", "Landed Cost Debug")
 
     if doc.custom_create_landed_cost_ == "Yes":
