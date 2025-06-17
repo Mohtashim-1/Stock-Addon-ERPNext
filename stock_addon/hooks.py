@@ -135,6 +135,9 @@ doc_events = {
     },
     "Delivery Note": {
         "on_submit": "stock_addon.stock_addon.doctype.delivery_note.delivery_note.create_outward_gate_pass_from_delivery_note",
+    },
+    "Material Request": {
+        "on_submit": "stock_addon.stock_addon.doctype.material_request.material_request.calculate_total_qty",
     }
 }
 
