@@ -7,4 +7,3 @@ def calculate_total_qty(doc, method):
 	for item in doc.items:
 		total_qty += item.qty
 	doc.custom_total_qty = total_qty
-	
