@@ -5,13 +5,49 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "name1"
+  "name1",
+  "section_break_custom_fields",
+  "custom_gsm",
+  "custom_length",
+  "custom_width",
+  "custom_zip_size",
+  "custom_cartons_ply"
  ],
  "fields": [
   {
    "fieldname": "name1",
    "fieldtype": "Data",
    "label": "Name"
+  },
+  {
+   "fieldname": "section_break_custom_fields",
+   "fieldtype": "Section Break",
+   "label": "Custom Fields"
+  },
+  {
+   "fieldname": "custom_gsm",
+   "fieldtype": "Check",
+   "label": "Enable GSM"
+  },
+  {
+   "fieldname": "custom_length",
+   "fieldtype": "Check",
+   "label": "Enable Length"
+  },
+  {
+   "fieldname": "custom_width",
+   "fieldtype": "Check",
+   "label": "Enable Width"
+  },
+  {
+   "fieldname": "custom_zip_size",
+   "fieldtype": "Check",
+   "label": "Enable Zip Size"
+  },
+  {
+   "fieldname": "custom_cartons_ply",
+   "fieldtype": "Check",
+   "label": "Enable Cartons Ply"
   }
  ],
  "index_web_pages_for_search": 1,

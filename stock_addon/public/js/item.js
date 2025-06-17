@@ -31,6 +31,23 @@ frappe.listview_settings['Item'] = {
 };
 
 
+
+// capitalize item code and item name 
+
+
+frappe.ui.form.on('Item', {
+    validate: function(frm) {
+        if (frm.doc.item_name) {
+            frm.set_value('item_name', frm.doc.item_name.toUpperCase());
+        }
+        if (frm.doc.item_code) {
+            frm.set_value('item_code', frm.doc.item_code.toUpperCase());
+        }
+    }
+});
+
+
+
 // Filter item fuzzy search
 
 frappe.listview_settings['Item'] = {
@@ -155,237 +172,156 @@ frappe.ui.form.on('Item', {
 // item restriction on category
 
 frappe.ui.form.on('Item', {
+    setup: function(frm) {
+        // Hide all sections when form loads
+        const sectionsToHide = [
+            'Other Items',
+            'Services',
+            'Machine',
+            'Stitched Goods',
+            'Piping',
+            'Finished Product',
+            'custom_other_item_description',
+            'custom_service_description',
+            'custom_machine_description',
+            'custom_stitched_goods_description',
+            'custom_piping_type',
+            'custom_piping_stitching_style',
+            'custom_finished_group_description',
+            'custom_thread',
+            'custom_zip',
+            'custom_general',
+            'custom_belly_band',
+            'custom_labels',
+            'custom_cartons',
+            'custom_protection_sheet',
+            'custom_button',
+            'custom_inner_sheet',
+            'custom_inlay_card',
+            'custom_sticker',
+            'custom_shipping_mark',
+            'custom_poly_bag',
+            'custom_elastic',
+            'custom_tape',
+            'custom_slider',
+            'custom_polyfil',
+            'custom_spare_parts'
+        ];
+
+        sectionsToHide.forEach(section => {
+            try {
+                frm.set_df_property(section, 'hidden', 1);
+            } catch (e) {
+                console.log('Error hiding section:', section, e);
+            }
+        });
+    },
+
     refresh: function(frm) {
-        // fabric treatment
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'fabric_treatment'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.fabric_treatment) {
-                        frm.set_df_property('custom_printdyed_', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_printdyed_', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        // article
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'article'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.article) {
-                        frm.set_df_property('custom_article', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_article', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        // item quality
-        
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'item_quality'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.item_quality) {
-                        frm.set_df_property('custom_item_quantity', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_item_quantity', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        // finished item
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'finished_item'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.finished_item) {
-                        frm.set_df_property('custom_finished_item', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_finished_item', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // design
-        
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'design'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.design) {
-                        frm.set_df_property('custom_design', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_design', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // micron
-        
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'micron'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.micron) {
-                        frm.set_df_property('custom_micron', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_micron', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // gsm
-        
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'gsm'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.gsm) {
-                        frm.set_df_property('custom_gsm', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_gsm', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // length
-        
-         if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'length1'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.length1) {
-                        frm.set_df_property('custom_length', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_length', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // width
-        
-        if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_width },
-                    fieldname: 'width'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.width) {
-                        frm.set_df_property('custom_width', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_width', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // size
-        
-         if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'size'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.size) {
-                        frm.set_df_property('custom_size', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_size', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-        // ply
-        
-         if (frm.doc.custom_item_category) {
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item Category',
-                    filters: { name: frm.doc.custom_item_category },
-                    fieldname: 'ply'
-                },
-                callback: function(r) {
-                    if (r.message && r.message.ply) {
-                        frm.set_df_property('custom_ply', 'hidden', 0); // Show field
-                    } else {
-                        frm.set_df_property('custom_ply', 'hidden', 1); // Hide field
-                    }
-                }
-            });
-        }
-        
-    }
-});
+        // Define category to section mappings
+        const categorySections = {
+            'Thread': ['custom_thread'],
+            'ZIP': ['custom_zip'],
+            'General': ['custom_general'],
+            'Belly Band': ['custom_belly_band'],
+            'Labels': ['custom_labels'],
+            'Cartons': ['custom_cartons'],
+            'Protection Sheet': ['custom_protection_sheet'],
+            'Button': ['custom_button'],
+            'Inner Sheet': ['custom_inner_sheet'],
+            'Inlay Card': ['custom_inlay_card'],
+            'Sticker': ['custom_sticker'],
+            'Shipping Mark': ['custom_shipping_mark'],
+            'Poly Bag': ['custom_poly_bag'],
+            'Elastic': ['custom_elastic'],
+            'Tape': ['custom_tape'],
+            'Slider': ['custom_slider'],
+            'Polyfill': ['custom_polyfil'],
+            'Spare Parts': ['custom_spare_parts'],
+            'custom_other_item': ['Other Items', 'Services']
+        };
 
+        // Define all sections that should be hidden for specific categories
+        const sectionsToHide = [
+            'Other Items',
+            'Services',
+            'Machine',
+            'Stitched Goods',
+            'Piping',
+            'Finished Product',
+            'custom_other_item_description',
+            'custom_service_description',
+            'custom_machine_description',
+            'custom_stitched_goods_description',
+            'custom_piping_type',
+            'custom_piping_stitching_style',
+            'custom_finished_group_description',
+            'custom_thread',
+            'custom_zip',
+            'custom_general',
+            'custom_belly_band',
+            'custom_labels',
+            'custom_cartons',
+            'custom_protection_sheet',
+            'custom_button',
+            'custom_inner_sheet',
+            'custom_inlay_card',
+            'custom_sticker',
+            'custom_shipping_mark',
+            'custom_poly_bag',
+            'custom_elastic',
+            'custom_tape',
+            'custom_slider',
+            'custom_polyfil',
+            'custom_spare_parts'
+        ];
 
-// capitalize item code and item name 
-
-
-frappe.ui.form.on('Item', {
-    validate: function(frm) {
-        if (frm.doc.item_name) {
-            frm.set_value('item_name', frm.doc.item_name.toUpperCase());
+        if (!frm.doc.custom_item_category) {
+            // Hide all sections if no category is selected
+            sectionsToHide.forEach(section => {
+                try {
+                    frm.set_df_property(section, 'hidden', 1);
+                } catch (e) {
+                    console.log('Error hiding section:', section, e);
+                }
+            });
+            return;
         }
-        if (frm.doc.item_code) {
-            frm.set_value('item_code', frm.doc.item_code.toUpperCase());
+
+        // Find the matching category (case-insensitive)
+        const selectedCategory = Object.keys(categorySections).find(
+            category => category.toLowerCase() === frm.doc.custom_item_category.toLowerCase()
+        );
+
+        if (selectedCategory) {
+            // Hide all sections first
+            sectionsToHide.forEach(section => {
+                try {
+                    frm.set_df_property(section, 'hidden', 1);
+                } catch (e) {
+                    console.log('Error hiding section:', section, e);
+                }
+            });
+
+            // Show sections for the selected category
+            const sectionsToShow = categorySections[selectedCategory];
+            sectionsToShow.forEach(section => {
+                try {
+                    frm.set_df_property(section, 'hidden', 0);
+                } catch (e) {
+                    console.log('Error showing section:', section, e);
+                }
+            });
+        } else {
+            // Hide all sections if no matching category
+            sectionsToHide.forEach(section => {
+                try {
+                    frm.set_df_property(section, 'hidden', 1);
+                } catch (e) {
+                    console.log('Error hiding section:', section, e);
+                }
+            });
         }
     }
 });
-
 
