@@ -4,9 +4,9 @@ from frappe.utils import now_datetime
 
 # def on_submit(self):
 #     self.create_lc()
-def on_submit(self, method):
-    # if self.custom_create_landed_cost_ == "Yes":
-        create_lc(self)
+# def on_submit(self, method):
+#     # if self.custom_create_landed_cost_ == "Yes":
+#         create_lc(self)
 
     
 def create_lc(doc, method):

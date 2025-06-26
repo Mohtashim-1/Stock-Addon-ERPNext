@@ -117,9 +117,9 @@ doctype_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Purchase Invoice": "stock_addon.stock_addon.overrides.purchase_invoice_override.PurchaseInvoice",
+}
 
 # Document Events
 # ---------------
@@ -138,7 +138,13 @@ doc_events = {
     },
     "Material Request": {
         "validate": "stock_addon.stock_addon.doctype.material_request.material_request.calculate_total_qty",
-    }
+    },
+    "Landed Cost Voucher": {
+        "on_submit": "stock_addon.stock_addon.doctype.landed_cost_voucher.landed_cost_voucher.create_purchase_invoice_from_landed_cost_voucher_taxes",
+    },
+    # "Purchase Invoice": {
+    #     "before_validate": "stock_addon.stock_addon.overrides.purchase_invoice_override.override_po_pr_requirement"
+    # }
 }
 
 # Scheduled Tasks
@@ -237,4 +243,3 @@ doc_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
