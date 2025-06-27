@@ -7,6 +7,9 @@ def create_purchase_invoice_from_landed_cost_voucher_taxes(doc, method):
     frappe.msgprint("Landed Cost Voucher is submitted")
     frappe.msgprint("Creating Purchase Invoice")
     
+    # Counter for series
+    series_counter = 1
+    
     for tax_row in doc.taxes:
         supplier = tax_row.custom_supplier or doc.supplier
 
@@ -17,7 +20,7 @@ def create_purchase_invoice_from_landed_cost_voucher_taxes(doc, method):
             "supplier": supplier,
             "grand_total": tax_row.amount,
             "posting_date": now_datetime(),
-            "bill_no": doc.name,
+            "bill_no": f"LCV-{doc.name}-{series_counter}",  # series will show like 1,2,3,...
             "bill_date": now_datetime(),
             "ignore_pr_validation": 1,
             "ignore_po_validation": 1
@@ -51,6 +54,9 @@ def create_purchase_invoice_from_landed_cost_voucher_taxes(doc, method):
         pi.insert(ignore_permissions=True)
         frappe.local.form_dict.pop("_lcv_invoice_doc", None)  # Clean up after insert
         frappe.msgprint(f"Created Purchase Invoice: {pi.name} for supplier: {supplier}")
+        
+        # Increment series counter
+        series_counter += 1
 
 # Patch validate to skip PO/PR for LCV
 original_validate = PurchaseInvoice.validate
