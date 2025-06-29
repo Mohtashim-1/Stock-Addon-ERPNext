@@ -36,6 +36,7 @@ doctype_list_js = {
     "Material Request" : "public/js/material_request_list.js",
     "Purchase Receipt" : "public/js/purchase_receipt_list.js",  
     "Purchase Order" : "public/js/purchase_order_list.js",
+    "Bin" : "public/js/bin_list.js",
     }
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -135,7 +136,7 @@ doc_events = {
         "on_submit": [
             "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_lc",
             "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_outward_gate_pass_from_purchase_receipt",
-        ],
+        ]
     },
     "Delivery Note": {
         "on_submit": "stock_addon.stock_addon.doctype.delivery_note.delivery_note.create_outward_gate_pass_from_delivery_note",

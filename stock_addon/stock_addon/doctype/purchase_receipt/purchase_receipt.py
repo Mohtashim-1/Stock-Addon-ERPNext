@@ -1,6 +1,6 @@
 import frappe
 from frappe.model.document import Document
-from frappe.utils import now_datetime
+from frappe.utils import now_datetime, flt
 
 # def on_submit(self):
 #     self.create_lc()
