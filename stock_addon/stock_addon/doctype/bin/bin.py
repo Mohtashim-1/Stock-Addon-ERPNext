@@ -34,3 +34,10 @@ def recalculate_all_bins():
 				frappe.log_error(f"Error recalculating bin {bin_name}: {str(e)}", "Bin Recalculation Error")
 	
 	return {"message": f"Successfully recalculated {processed} out of {total_bins} bins"}
+
+
+# @frappe.whitelist()
+# def get_bin_details(bin_name):
+# 	"""Get bin details for a specific bin"""
+# 	bin_doc = frappe.get_doc("Bin", bin_name)
+# 	return bin_doc
