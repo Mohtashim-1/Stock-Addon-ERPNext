@@ -1,4 +1,6 @@
 import frappe
+from frappe import _
+
 
 @frappe.whitelist()
 def recalculate_qty(bin_name=None):
@@ -35,9 +37,58 @@ def recalculate_all_bins():
 	
 	return {"message": f"Successfully recalculated {processed} out of {total_bins} bins"}
 
+# stock_addon/stock_addon/doctype/bin/bin.py
 
-# @frappe.whitelist()
-# def get_bin_details(bin_name):
-# 	"""Get bin details for a specific bin"""
-# 	bin_doc = frappe.get_doc("Bin", bin_name)
-# 	return bin_doc
+import frappe
+from frappe import _
+
+@frappe.whitelist()
+def recalc_impacted_bins(doc, method):
+    """
+    DocEvent hook for submit/cancel of PR, Stock Entry, Stock Reconciliation.
+    Only recalculates the bins actually touched by the transaction.
+    """
+    affected_bins = set()
+
+    # for each child row, collect all relevant warehouse fields
+    for row in doc.get("items", []):
+        item_code = getattr(row, "item_code", None)
+        if not item_code:
+            continue
+
+        # possible warehouse fields per doctype
+        whs = []
+        # Purchase Receipt & Stock Reconciliation
+        whs.append(getattr(row, "warehouse", None))
+        # Stock Entry: source and target
+        whs.append(getattr(row, "s_warehouse", None))
+        whs.append(getattr(row, "t_warehouse", None))
+
+        for wh in filter(None, whs):
+            # find the Bin record(s) for this item+warehouse
+            for b in frappe.get_all(
+                "Bin",
+                filters={"item_code": item_code, "warehouse": wh},
+                pluck="name"
+            ):
+                affected_bins.add(b)
+
+    if not affected_bins:
+        # nothing to do, but log so you can see why
+        frappe.log_error(
+            _("No Bins found to recalc for {0} {1}").format(doc.doctype, doc.name),
+            "recalc_impacted_bins"
+        )
+        return
+
+    # recalc each bin
+    for bin_name in affected_bins:
+        try:
+            frappe.get_doc("Bin", bin_name).recalculate_qty()
+        except Exception:
+            frappe.log_error(
+                frappe.get_traceback(),
+                f"recalc_impacted_bins failure for Bin {bin_name}"
+            )
+
+    frappe.db.commit()

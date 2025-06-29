@@ -136,6 +136,26 @@ doc_events = {
         "on_submit": [
             "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_lc",
             "stock_addon.stock_addon.doctype.purchase_receipt.purchase_receipt.create_outward_gate_pass_from_purchase_receipt",
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+        ],
+        "on_cancel": [
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+        ]
+    },
+    "Stock Entry": {
+        "on_submit": [
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+        ],
+        "on_cancel": [
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+        ]
+    },
+    "Stock Reconciliation": {
+        "on_submit": [
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+        ],
+        "on_cancel": [
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
         ]
     },
     "Delivery Note": {
