@@ -124,6 +124,7 @@ doctype_list_js = {
 
 override_doctype_class = {
 	"Purchase Invoice": "stock_addon.stock_addon.overrides.purchase_invoice_override.PurchaseInvoice",
+    "Bin": "stock_addon.stock_addon.doctype.bin.bin.Bin"
 }
 
 # Document Events
