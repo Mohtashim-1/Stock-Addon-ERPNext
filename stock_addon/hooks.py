@@ -124,6 +124,7 @@ doctype_list_js = {
 
 override_doctype_class = {
 	"Purchase Invoice": "stock_addon.stock_addon.overrides.purchase_invoice_override.PurchaseInvoice",
+    "Purchase Receipt": "stock_addon.stock_addon.overrides.purchase_receipt_override.PurchaseReceipt",
     "Bin": "stock_addon.stock_addon.doctype.bin.bin.Bin"
 }
 
