@@ -30,7 +30,8 @@ app_license = "mit"
 # include js in doctype views
 doctype_js = {
     # "Item" : "public/js/item.js",
-    "Purchase Receipt" : "public/js/purchase_receipt.js "
+    "Purchase Receipt" : "public/js/purchase_receipt.js ",
+    "Stock Entry" : "public/js/stock_entry.js"
     }
 doctype_list_js = {
     "Material Request" : "public/js/material_request_list.js",
@@ -150,7 +151,8 @@ doc_events = {
         ],
         "on_cancel": [
             "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
-        ]
+        ],
+        "validate": "stock_addon.stock_addon.doctype.stock_entry.stock_entry.set_cost_center_to_child_items"
     },
     "Stock Reconciliation": {
         "on_submit": [
