@@ -21,7 +21,7 @@ def create_outward_gate_pass_from_delivery_note(doc, method):
             "driver_name": "",
             "driver_contact": "",
             "non_inventory": [],
-            "creation_date": now_datetime()
+            "creation_date": doc.posting_date
         })
 
         # Add items from Delivery Note to the child table
