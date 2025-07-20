@@ -152,7 +152,10 @@ doc_events = {
         "on_cancel": [
             "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
         ],
-        "validate": "stock_addon.stock_addon.doctype.stock_entry.stock_entry.set_cost_center_to_child_items"
+        "validate": [
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.set_cost_center_to_child_items",
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.get_expense_account"
+        ]
     },
     "Stock Reconciliation": {
         "on_submit": [
