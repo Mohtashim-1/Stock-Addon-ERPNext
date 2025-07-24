@@ -213,9 +213,7 @@ doc_events = {
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
-dashboard_data = {
-    'Landed Cost Voucher': 'stock_addon.stock_addon.doctype.landed_cost_voucher.landed_cost_voucher_dashboard.get_data'
-}
+
 override_doctype_dashboards = {
     "Purchase Invoice": "stock_addon.stock_addon.doctype.purchase_invoice.purchase_invoice_dashboard.get_data",
     "Landed Cost Voucher": "stock_addon.stock_addon.doctype.landed_cost_voucher.landed_cost_voucher_dashboard.get_data"
