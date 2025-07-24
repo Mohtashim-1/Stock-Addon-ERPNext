@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils import now_datetime
 from erpnext.accounts.doctype.purchase_invoice.purchase_invoice import PurchaseInvoice
+from frappe import _
 
 @frappe.whitelist()
 def create_purchase_invoice_from_landed_cost_voucher_taxes(doc, method):
@@ -72,3 +73,43 @@ def patched_validate(self):
     original_validate(self)
 
 PurchaseInvoice.validate = patched_validate
+
+
+@frappe.whitelist()
+def get_receipt_document_details(receipt_document_type, receipt_document):
+    frappe.log_error(f"get_receipt_document_details called with type={receipt_document_type}, doc={receipt_document}", "DEBUG LCV DETAILS")
+    if receipt_document_type in [
+        "Purchase Invoice",
+        "Purchase Receipt",
+        "Subcontracting Receipt",
+    ]:
+        fields = ["supplier", "posting_date", "supplier_delivery_note"]
+        if receipt_document_type == "Subcontracting Receipt":
+            fields.append("total as grand_total")
+        else:
+            fields.append("base_grand_total as grand_total")
+    elif receipt_document_type == "Stock Entry":
+        fields = ["total_incoming_value as grand_total"]
+
+    result = frappe.db.get_value(
+        receipt_document_type,
+        receipt_document,
+        fields,
+        as_dict=True,
+    )
+    frappe.log_error(f"get_receipt_document_details result: {result}", "DEBUG LCV DETAILS")
+    return result
+
+@frappe.whitelist()
+def purchase_receipt_query(doctype, txt, searchfield, start, page_len, filters):
+    frappe.log_error(f"purchase_receipt_query called with txt={txt}", "DEBUG LCV QUERY")
+    return frappe.db.sql("""
+        SELECT name, supplier_delivery_note
+        FROM `tabPurchase Receipt`
+        WHERE docstatus = 1
+          AND (name LIKE %(txt)s OR supplier_delivery_note LIKE %(txt)s)
+        ORDER BY modified DESC
+        LIMIT 20
+    """, {"txt": f"%{txt}%"})
+
+

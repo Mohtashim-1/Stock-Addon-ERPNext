@@ -31,7 +31,8 @@ app_license = "mit"
 doctype_js = {
     # "Item" : "public/js/item.js",
     "Purchase Receipt" : "public/js/purchase_receipt.js ",
-    "Stock Entry" : "public/js/stock_entry.js"
+    "Stock Entry" : "public/js/stock_entry.js",
+    "Landed Cost Voucher" : "public/js/landed_cost_voucher.js"
     }
 doctype_list_js = {
     "Material Request" : "public/js/material_request_list.js",
@@ -174,9 +175,6 @@ doc_events = {
     "Landed Cost Voucher": {
         "on_submit": "stock_addon.stock_addon.doctype.landed_cost_voucher.landed_cost_voucher.create_purchase_invoice_from_landed_cost_voucher_taxes",
     },
-    # "Purchase Invoice": {
-    #     "before_validate": "stock_addon.stock_addon.overrides.purchase_invoice_override.override_po_pr_requirement"
-    # }
 }
 
 # Scheduled Tasks
@@ -275,3 +273,4 @@ override_doctype_dashboards = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
