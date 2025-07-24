@@ -6,8 +6,8 @@ import frappe
 
 def execute(filters=None):
 	columns = [
-		{"label": "Item", "fieldname": "item_code", "fieldtype": "Link", "options": "Item", "width": 150},
-		{"label": "Warehouse", "fieldname": "warehouse", "fieldtype": "Link", "options": "Warehouse", "width": 150},
+		{"label": "Item", "fieldname": "item_code", "fieldtype": "Link", "options": "Item", "width": 700},
+		{"label": "Warehouse", "fieldname": "warehouse", "fieldtype": "Link", "options": "Warehouse", "width": 200},
 		{"label": "Balance Qty", "fieldname": "qty_after_transaction", "fieldtype": "Float", "width": 120},
 	]
 
@@ -24,20 +24,20 @@ def execute(filters=None):
 	if filters.get("company"):
 		conditions.append("sle.company = %(company)s")
 		values["company"] = filters["company"]
-	if filters.get("from_date"):
-		conditions.append("sle.posting_date >= %(from_date)s")
-		values["from_date"] = filters["from_date"]
+	# Only filter by to_date, not from_date
 	if filters.get("to_date"):
 		conditions.append("sle.posting_date <= %(to_date)s")
 		values["to_date"] = filters["to_date"]
 	if filters.get("item_group"):
 		join_item = True
-		conditions.append("i.item_group = %(item_group)s")
-		values["item_group"] = filters["item_group"]
+		ig = frappe.db.get_value("Item Group", filters["item_group"], ["lft", "rgt"], as_dict=True)
+		if ig:
+			conditions.append("ig.lft >= %(lft)s AND ig.rgt <= %(rgt)s")
+			values["lft"] = ig.lft
+			values["rgt"] = ig.rgt
 
-	# Get latest SLE for each (item_code, warehouse) within the date range
 	if join_item:
-		join = "JOIN `tabItem` i ON sle.item_code = i.name"
+		join = "JOIN `tabItem` i ON sle.item_code = i.name JOIN `tabItem Group` ig ON i.item_group = ig.name"
 	else:
 		join = ""
 
@@ -50,7 +50,6 @@ def execute(filters=None):
 			SELECT item_code, warehouse, MAX(posting_datetime) AS max_posting_datetime
 			FROM `tabStock Ledger Entry`
 			WHERE is_cancelled = 0 AND docstatus < 2
-			{'AND posting_date >= %(from_date)s' if filters.get('from_date') else ''}
 			{'AND posting_date <= %(to_date)s' if filters.get('to_date') else ''}
 			GROUP BY item_code, warehouse
 		) latest
@@ -61,4 +60,16 @@ def execute(filters=None):
 		values,
 		as_dict=True
 	)
+
 	return columns, data
+
+
+def get_opening_balance(item_code, warehouse, from_date):
+    result = frappe.db.sql("""
+        SELECT SUM(actual_qty) as opening_qty
+        FROM `tabStock Ledger Entry`
+        WHERE item_code = %s AND warehouse = %s
+          AND posting_date < %s
+          AND docstatus < 2 AND is_cancelled = 0
+    """, (item_code, warehouse, from_date))
+    return result[0][0] or 0
