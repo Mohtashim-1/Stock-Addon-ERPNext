@@ -448,26 +448,30 @@ function show_cost_center_dialog(frm) {
                 fieldtype: 'MultiSelectPills',
                 fieldname: 'item_groups',
                 label: __('Select Item Groups'),
+                default: [], // Ensure it starts empty
                 get_data: function(txt) {
                     console.log('[DEBUG] get_data called with txt:', txt);
                     return new Promise((resolve) => {
+                        // Only fetch data if there's actual text input
+                        if (!txt || txt.length < 1) {
+                            resolve([]);
+                            return;
+                        }
+                        
                         frappe.call({
                             method: 'frappe.client.get_list',
                             args: {
                                 doctype: 'Item Group',
-                                filters: {}, // Remove the is_group filter to get ALL item groups
+                                filters: {
+                                    'name': ['like', `%${txt}%`] // Filter by search text
+                                },
                                 fields: ['name', 'is_group'],
                                 limit_start: 0,
-                                limit_page_length: 500,
+                                limit_page_length: 100, // Reduced limit
                                 order_by: 'name asc'
                             }
                         }).then(r => {
-                            console.log('[DEBUG] All item groups fetched:', r.message);
-                            console.log('[DEBUG] Looking for fabric-related groups:', 
-                                (r.message || []).filter(item => 
-                                    item.name.toLowerCase().includes('fabric')
-                                )
-                            );
+                            console.log('[DEBUG] Item groups fetched for search:', txt, r.message);
                             
                             const results = (r.message || []).map(item => ({
                                 value: item.name,
@@ -538,8 +542,16 @@ function show_cost_center_dialog(frm) {
             }
             console.log('[DEBUG] Final extracted item groups:', item_groups);
             
+            // Get the primary action button and show loading state
+            const primary_btn = dialog.$wrapper.find('.btn-primary');
+            const original_text = primary_btn.text();
+            const original_disabled = primary_btn.prop('disabled');
+            
+            // Show loading state
+            primary_btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> ' + __('Loading...'));
+            
             frappe.show_alert({
-                message: __('Fetching items...'),
+                message: __('Fetching items from warehouses...'),
                 indicator: 'blue'
             });
             
@@ -560,6 +572,10 @@ function show_cost_center_dialog(frm) {
                 args: args,
                 callback: function(r) {
                     console.log('[DEBUG] Server response:', r);
+                    
+                    // Restore button state
+                    primary_btn.prop('disabled', original_disabled).text(original_text);
+                    
                     if (r.message && r.message.items) {
                         console.log('[DEBUG] Items received:', r.message.items.length);
                         console.log('[DEBUG] First few items:', r.message.items.slice(0, 3));
@@ -599,14 +615,15 @@ function show_cost_center_dialog(frm) {
                 },
                 error: function(r) {
                     console.error('[DEBUG] Server error:', r);
+                    
+                    // Restore button state on error
+                    primary_btn.prop('disabled', original_disabled).text(original_text);
+                    
                     frappe.msgprint(__('Error fetching items: {0}', [r.message || 'Unknown error']));
                 }
             });
         }
     });
-    
-    // Add a default row to warehouse table
-    dialog.fields_dict.warehouse_table.df.data = [{}];
     
     dialog.show();
 }
