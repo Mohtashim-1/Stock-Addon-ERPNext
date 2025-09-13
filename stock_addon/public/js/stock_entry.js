@@ -455,19 +455,23 @@ function show_cost_center_dialog(frm) {
                             method: 'frappe.client.get_list',
                             args: {
                                 doctype: 'Item Group',
-                                filters: {
-                                    is_group: 0
-                                },
-                                fields: ['name'],
+                                filters: {}, // Remove the is_group filter to get ALL item groups
+                                fields: ['name', 'is_group'],
                                 limit_start: 0,
-                                limit_page_length: 200,
+                                limit_page_length: 500,
                                 order_by: 'name asc'
                             }
                         }).then(r => {
-                            console.log('[DEBUG] Item groups fetched:', r.message);
+                            console.log('[DEBUG] All item groups fetched:', r.message);
+                            console.log('[DEBUG] Looking for fabric-related groups:', 
+                                (r.message || []).filter(item => 
+                                    item.name.toLowerCase().includes('fabric')
+                                )
+                            );
+                            
                             const results = (r.message || []).map(item => ({
                                 value: item.name,
-                                description: item.name
+                                description: `${item.name} ${item.is_group ? '(Group)' : '(Item)'}`
                             }));
                             console.log('[DEBUG] Processed results:', results);
                             resolve(results);

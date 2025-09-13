@@ -22,6 +22,33 @@ def get_expense_account(doc, method):
             frappe.log_error(f"Error setting expense account: {str(e)}")
 
 
+def get_all_child_item_groups(item_group_name):
+    """Get all child item groups recursively"""
+    try:
+        print(f"[DEBUG] Getting child groups for: {item_group_name}")
+        
+        # Get direct children
+        children = frappe.get_all("Item Group",
+            filters={"parent_item_group": item_group_name},
+            fields=["name"]
+        )
+        
+        print(f"[DEBUG] Direct children of '{item_group_name}': {[c.name for c in children]}")
+        
+        child_groups = []
+        for child in children:
+            child_groups.append(child.name)
+            # Recursively get children of children
+            grand_children = get_all_child_item_groups(child.name)
+            child_groups.extend(grand_children)
+        
+        print(f"[DEBUG] All children of '{item_group_name}': {child_groups}")
+        return child_groups
+    except Exception as e:
+        print(f"[DEBUG] Error getting child item groups for {item_group_name}: {str(e)}")
+        return []
+
+
 @frappe.whitelist()
 def get_items_from_source(source_type, source, warehouses=None, cost_center=None, item_groups=None, include_zero_qty=False, company=None):
     """Get items from warehouse or sales order for Stock Entry"""
@@ -54,6 +81,20 @@ def get_items_from_source(source_type, source, warehouses=None, cost_center=None
         print(f"[DEBUG] Parsed warehouses: {warehouses}")
         print(f"[DEBUG] Parsed item_groups: {item_groups}")
         
+        # Expand item groups to include all children
+        expanded_item_groups = []
+        if item_groups:
+            for item_group in item_groups:
+                expanded_item_groups.append(item_group)
+                # Get all child item groups
+                child_groups = get_all_child_item_groups(item_group)
+                expanded_item_groups.extend(child_groups)
+                print(f"[DEBUG] Item group '{item_group}' has children: {child_groups}")
+            
+            # Remove duplicates
+            expanded_item_groups = list(set(expanded_item_groups))
+            print(f"[DEBUG] Expanded item groups: {expanded_item_groups}")
+        
         if source_type == 'Cost Center':
             # Get items from warehouses with optional cost center and item group filtering
             bin_filters = {"warehouse": ["in", warehouses]}
@@ -76,27 +117,44 @@ def get_items_from_source(source_type, source, warehouses=None, cost_center=None
                 try:
                     item_doc = frappe.get_cached_doc("Item", bin.item_code)
                     
-                    # Filter by item groups if specified
-                    if item_groups and item_doc.item_group not in item_groups:
+                    # Filter by item groups if specified (using expanded list)
+                    if expanded_item_groups and item_doc.item_group not in expanded_item_groups:
+                        print(f"[DEBUG] Skipping item {bin.item_code} - item_group '{item_doc.item_group}' not in {expanded_item_groups}")
                         continue
                     
                     # Filter by cost center if specified
                     if cost_center:
+                        print(f"[DEBUG] Checking cost center filter for item {bin.item_code}")
+                        
                         # Check if this item was transferred with this cost center
+                        # We need to check both source and target warehouses for stock entries
                         stock_entries = frappe.get_all("Stock Entry Detail",
                             filters={
                                 "item_code": bin.item_code,
-                                "warehouse": bin.warehouse,
-                                "cost_center": cost_center
+                                "cost_center": cost_center,
+                                "docstatus": 1  # Only submitted entries
                             },
-                            fields=["name"],
-                            limit=1
+                            fields=["name", "s_warehouse", "t_warehouse"],
+                            limit=10
                         )
                         
-                        if not stock_entries:
+                        print(f"[DEBUG] Found {len(stock_entries)} stock entries for item {bin.item_code} with cost center {cost_center}")
+                        
+                        # Check if any of these entries involve the current warehouse
+                        warehouse_found = False
+                        for entry in stock_entries:
+                            if entry.s_warehouse == bin.warehouse or entry.t_warehouse == bin.warehouse:
+                                warehouse_found = True
+                                print(f"[DEBUG] Item {bin.item_code} found in warehouse {bin.warehouse} with cost center {cost_center}")
+                                break
+                        
+                        if not warehouse_found:
+                            print(f"[DEBUG] Skipping item {bin.item_code} - not found in warehouse {bin.warehouse} with cost center {cost_center}")
                             continue
                     
-                    items.append({
+                    print(f"[DEBUG] Adding item {bin.item_code} with item_group '{item_doc.item_group}'")
+                    
+                    item_data = {
                         "item_code": bin.item_code,
                         "item_name": item_doc.item_name,
                         "qty": bin.actual_qty,
@@ -106,7 +164,13 @@ def get_items_from_source(source_type, source, warehouses=None, cost_center=None
                         "warehouse": bin.warehouse,
                         "rate": bin.valuation_rate,
                         "valuation_rate": bin.valuation_rate
-                    })
+                    }
+                    
+                    # Add cost center to item if specified
+                    if cost_center:
+                        item_data["cost_center"] = cost_center
+                    
+                    items.append(item_data)
                     
                 except Exception as e:
                     print(f"[DEBUG] Error processing item {bin.item_code}: {str(e)}")
