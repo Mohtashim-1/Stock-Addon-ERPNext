@@ -18,17 +18,17 @@ frappe.ui.form.on('Stock Entry', {
             }, __('Get Items From'));
             
             // Add "Sales Order" option to Get Items From dropdown
-            frm.add_custom_button(__('Sales Order'), function() {
-                show_sales_order_dialog(frm);
-            }, __('Get Items From'));
+            // frm.add_custom_button(__('Sales Order'), function() {
+            //     show_sales_order_dialog(frm);
+            // }, __('Get Items From'));
             
             // Add "Warehouse with Sales Order" option to Get Items From dropdown
-            frm.add_custom_button(__('Warehouse with Sales Order'), function() {
-                show_warehouse_with_sales_order_dialog(frm);
-            }, __('Get Items From'));
+            // frm.add_custom_button(__('Warehouse with Sales Order'), function() {
+            //     show_warehouse_with_sales_order_dialog(frm);
+            // }, __('Get Items From'));
             
             // Add "Cost Center" option to Get Items From dropdown
-            frm.add_custom_button(__('Cost Center'), function() {
+            frm.add_custom_button(__('Warehouse with Cost Center'), function() {
                 show_cost_center_dialog(frm);
             }, __('Get Items From'));
         }
@@ -438,6 +438,19 @@ function show_cost_center_dialog(frm) {
                 data: [{}] // Pre-populate with one empty row
             },
             {
+                fieldtype: 'Link',
+                fieldname: 'item_group',
+                label: __('Item Group (Optional)'),
+                options: 'Item Group',
+                get_query: function() {
+                    return {
+                        filters: {
+                            is_group: 0
+                        }
+                    };
+                }
+            },
+            {
                 fieldtype: 'Check',
                 fieldname: 'include_zero_qty',
                 label: __('Include Zero Quantity Items'),
@@ -477,6 +490,7 @@ function show_cost_center_dialog(frm) {
                 source: warehouses[0], // For backward compatibility
                 warehouses: warehouses,
                 cost_center: values.cost_center || null,
+                item_group: values.item_group || null,
                 include_zero_qty: values.include_zero_qty,
                 company: frm.doc.company
             };
@@ -523,9 +537,16 @@ function show_cost_center_dialog(frm) {
                         frm.refresh_field('items');
                         dialog.hide();
                         
-                        const message = values.cost_center 
-                            ? __('{0} items added successfully from cost center {1}', [r.message.items.length, values.cost_center])
-                            : __('{0} items added successfully from warehouses', [r.message.items.length]);
+                        let message = '';
+                        if (values.cost_center && values.item_group) {
+                            message = __('{0} items added successfully from cost center {1} and item group {2}', [r.message.items.length, values.cost_center, values.item_group]);
+                        } else if (values.cost_center) {
+                            message = __('{0} items added successfully from cost center {1}', [r.message.items.length, values.cost_center]);
+                        } else if (values.item_group) {
+                            message = __('{0} items added successfully from item group {1}', [r.message.items.length, values.item_group]);
+                        } else {
+                            message = __('{0} items added successfully from warehouses', [r.message.items.length]);
+                        }
                         
                         frappe.show_alert({
                             message: message,
@@ -533,9 +554,16 @@ function show_cost_center_dialog(frm) {
                         });
                     } else {
                         console.log('[DEBUG] No items in response');
-                        const message = values.cost_center 
-                            ? __('No items found in selected warehouses for cost center {0}', [values.cost_center])
-                            : __('No items found in selected warehouses');
+                        let message = '';
+                        if (values.cost_center && values.item_group) {
+                            message = __('No items found in selected warehouses for cost center {0} and item group {1}', [values.cost_center, values.item_group]);
+                        } else if (values.cost_center) {
+                            message = __('No items found in selected warehouses for cost center {0}', [values.cost_center]);
+                        } else if (values.item_group) {
+                            message = __('No items found in selected warehouses for item group {0}', [values.item_group]);
+                        } else {
+                            message = __('No items found in selected warehouses');
+                        }
                         frappe.msgprint(message);
                     }
                 },

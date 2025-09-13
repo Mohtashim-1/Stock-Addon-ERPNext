@@ -34,7 +34,7 @@ def get_expense_account(doc, method):
 
 
 @frappe.whitelist()
-def get_items_from_source(source_type, source, include_zero_qty=False, company=None, warehouses=None, sales_order=None, cost_center=None):
+def get_items_from_source(source_type, source, include_zero_qty=False, company=None, warehouses=None, sales_order=None, cost_center=None, item_group=None):
     """Get items from warehouse, sales order, or cost center for Stock Entry"""
     try:
         print(f"[DEBUG] get_items_from_source called with:")
@@ -45,6 +45,7 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
         print(f"  warehouses: {warehouses} (type: {type(warehouses)})")
         print(f"  sales_order: {sales_order}")
         print(f"  cost_center: {cost_center}")
+        print(f"  item_group: {item_group}")
         
         items = []
         
@@ -81,6 +82,22 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
             )
             
             print(f"[DEBUG] Found {len(bins)} bins")
+            
+            # Filter by item group if specified
+            if item_group:
+                print(f"[DEBUG] Filtering by item group: {item_group}")
+                # Get items that belong to the specified item group
+                item_codes_in_group = frappe.get_all("Item",
+                    filters={"item_group": item_group},
+                    fields=["name"],
+                    pluck="name"
+                )
+                print(f"[DEBUG] Found {len(item_codes_in_group)} items in item group")
+                
+                # Filter bins to only include items from the specified item group
+                bins = [bin for bin in bins if bin.item_code in item_codes_in_group]
+                print(f"[DEBUG] After item group filter: {len(bins)} bins")
+            
             for i, bin in enumerate(bins[:5]):  # Show first 5 for debugging
                 print(f"  Bin {i+1}: {bin}")
             
@@ -113,6 +130,17 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
             )
             
             print(f"[DEBUG] Found {len(so_items)} sales order items")
+            
+            # Filter by item group if specified
+            if item_group:
+                print(f"[DEBUG] Filtering by item group: {item_group}")
+                item_codes_in_group = frappe.get_all("Item",
+                    filters={"item_group": item_group},
+                    fields=["name"],
+                    pluck="name"
+                )
+                so_items = [item for item in so_items if item.item_code in item_codes_in_group]
+                print(f"[DEBUG] After item group filter: {len(so_items)} sales order items")
             
             for so_item in so_items:
                 try:
@@ -156,6 +184,17 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
             )
             
             print(f"[DEBUG] Found {len(so_items)} sales order items")
+            
+            # Filter by item group if specified
+            if item_group:
+                print(f"[DEBUG] Filtering by item group: {item_group}")
+                item_codes_in_group = frappe.get_all("Item",
+                    filters={"item_group": item_group},
+                    fields=["name"],
+                    pluck="name"
+                )
+                so_items = [item for item in so_items if item.item_code in item_codes_in_group]
+                print(f"[DEBUG] After item group filter: {len(so_items)} sales order items")
             
             # Get actual stock from bins for these items in the specified warehouses
             if so_items and warehouse_list:
@@ -207,8 +246,9 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
         elif source_type == 'Cost Center':
             print(f"[DEBUG] Processing Cost Center source type")
             print(f"[DEBUG] Cost center: {cost_center}")
+            print(f"[DEBUG] Item group: {item_group}")
             
-            # New logic: Get items from warehouses, optionally filtered by cost center
+            # New logic: Get items from warehouses, optionally filtered by cost center and item group
             warehouse_list = []
             if isinstance(warehouses, str):
                 try:
@@ -234,6 +274,17 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
                 )
                 
                 print(f"[DEBUG] Found {len(stock_entry_items)} stock entry items with cost center")
+                
+                # Filter by item group if specified
+                if item_group:
+                    print(f"[DEBUG] Filtering by item group: {item_group}")
+                    item_codes_in_group = frappe.get_all("Item",
+                        filters={"item_group": item_group},
+                        fields=["name"],
+                        pluck="name"
+                    )
+                    stock_entry_items = [item for item in stock_entry_items if item.item_code in item_codes_in_group]
+                    print(f"[DEBUG] After item group filter: {len(stock_entry_items)} stock entry items")
                 
                 # Filter by warehouses and get current stock
                 item_codes = list(set([item.item_code for item in stock_entry_items]))
@@ -294,6 +345,17 @@ def get_items_from_source(source_type, source, include_zero_qty=False, company=N
                 )
                 
                 print(f"[DEBUG] Found {len(bins)} bins in warehouses")
+                
+                # Filter by item group if specified
+                if item_group:
+                    print(f"[DEBUG] Filtering by item group: {item_group}")
+                    item_codes_in_group = frappe.get_all("Item",
+                        filters={"item_group": item_group},
+                        fields=["name"],
+                        pluck="name"
+                    )
+                    bins = [bin for bin in bins if bin.item_code in item_codes_in_group]
+                    print(f"[DEBUG] After item group filter: {len(bins)} bins")
                 
                 for bin in bins:
                     try:
