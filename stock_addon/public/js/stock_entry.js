@@ -13,9 +13,9 @@ frappe.ui.form.on('Stock Entry', {
         // Add custom buttons to the existing "Get Items From" dropdown
         if (frm.doc.docstatus === 0) {
             // Add "Warehouse" option to Get Items From dropdown
-            frm.add_custom_button(__('Warehouse'), function() {
-                show_warehouse_dialog(frm);
-            }, __('Get Items From'));
+            // frm.add_custom_button(__('Warehouse'), function() {
+            //     show_warehouse_dialog(frm);
+            // }, __('Get Items From'));
             
             // Add "Sales Order" option to Get Items From dropdown
             // frm.add_custom_button(__('Sales Order'), function() {
@@ -408,16 +408,20 @@ function show_cost_center_dialog(frm) {
                 get_query: function() {
                     return {
                         filters: {
-                            is_group: 0,
-                            disabled: 0
+                            is_group: 0
                         }
                     };
                 }
             },
             {
+                fieldtype: 'Section Break',
+                label: __('Warehouse Selection')
+            },
+            {
                 fieldtype: 'Table',
                 fieldname: 'warehouse_table',
                 label: __('Select Warehouses'),
+                reqd: 1,
                 fields: [
                     {
                         fieldtype: 'Link',
@@ -434,21 +438,49 @@ function show_cost_center_dialog(frm) {
                             };
                         }
                     }
-                ],
-                data: [{}] // Pre-populate with one empty row
+                ]
             },
             {
-                fieldtype: 'Link',
-                fieldname: 'item_group',
-                label: __('Item Group (Optional)'),
-                options: 'Item Group',
-                get_query: function() {
-                    return {
-                        filters: {
-                            is_group: 0
-                        }
-                    };
+                fieldtype: 'Section Break',
+                label: __('Item Group Filter (Optional)')
+            },
+            {
+                fieldtype: 'MultiSelectPills',
+                fieldname: 'item_groups',
+                label: __('Select Item Groups'),
+                get_data: function(txt) {
+                    console.log('[DEBUG] get_data called with txt:', txt);
+                    return new Promise((resolve) => {
+                        frappe.call({
+                            method: 'frappe.client.get_list',
+                            args: {
+                                doctype: 'Item Group',
+                                filters: {
+                                    is_group: 0
+                                },
+                                fields: ['name'],
+                                limit_start: 0,
+                                limit_page_length: 200,
+                                order_by: 'name asc'
+                            }
+                        }).then(r => {
+                            console.log('[DEBUG] Item groups fetched:', r.message);
+                            const results = (r.message || []).map(item => ({
+                                value: item.name,
+                                description: item.name
+                            }));
+                            console.log('[DEBUG] Processed results:', results);
+                            resolve(results);
+                        }).catch((err) => {
+                            console.error('[DEBUG] Error fetching item groups:', err);
+                            resolve([]);
+                        });
+                    });
                 }
+            },
+            {
+                fieldtype: 'Section Break',
+                label: __('Options')
             },
             {
                 fieldtype: 'Check',
@@ -466,31 +498,53 @@ function show_cost_center_dialog(frm) {
         primary_action_label: __('Get Items'),
         primary_action: function(values) {
             console.log('[DEBUG] Cost Center dialog values:', values);
+            console.log('[DEBUG] Raw item_groups value:', values.item_groups);
+            console.log('[DEBUG] Type of item_groups:', typeof values.item_groups);
             
             if (!values.warehouse_table || values.warehouse_table.length === 0) {
-                frappe.msgprint(__('Please add at least one warehouse'));
-                return;
-            }
-            
-            const warehouses = values.warehouse_table.map(row => row.warehouse).filter(Boolean);
-            console.log('[DEBUG] Extracted warehouses:', warehouses);
-            
-            if (warehouses.length === 0) {
                 frappe.msgprint(__('Please select at least one warehouse'));
                 return;
             }
             
+            // Extract warehouses from table
+            const warehouses = values.warehouse_table.map(row => row.warehouse).filter(Boolean);
+            console.log('[DEBUG] Extracted warehouses:', warehouses);
+            
+            // Extract item groups - handle multiple formats
+            let item_groups = [];
+            if (values.item_groups) {
+                console.log('[DEBUG] Processing item_groups...');
+                
+                if (typeof values.item_groups === 'string') {
+                    console.log('[DEBUG] item_groups is string, trying to parse...');
+                    try {
+                        item_groups = JSON.parse(values.item_groups);
+                        console.log('[DEBUG] Parsed from JSON:', item_groups);
+                    } catch (e) {
+                        console.log('[DEBUG] JSON parse failed, treating as single value');
+                        item_groups = [values.item_groups];
+                    }
+                } else if (Array.isArray(values.item_groups)) {
+                    console.log('[DEBUG] item_groups is already array');
+                    item_groups = values.item_groups;
+                } else if (typeof values.item_groups === 'object') {
+                    console.log('[DEBUG] item_groups is object, extracting values...');
+                    item_groups = Object.values(values.item_groups).filter(Boolean);
+                }
+            }
+            console.log('[DEBUG] Final extracted item groups:', item_groups);
+            
             frappe.show_alert({
-                message: __('Fetching items from warehouses...'),
+                message: __('Fetching items...'),
                 indicator: 'blue'
             });
             
             const args = {
                 source_type: 'Cost Center',
-                source: warehouses[0], // For backward compatibility
+                source: warehouses[0], // Pass first warehouse as source
                 warehouses: warehouses,
                 cost_center: values.cost_center || null,
-                item_group: values.item_group || null,
+                item_groups: item_groups,
                 include_zero_qty: values.include_zero_qty,
                 company: frm.doc.company
             };
@@ -502,7 +556,6 @@ function show_cost_center_dialog(frm) {
                 args: args,
                 callback: function(r) {
                     console.log('[DEBUG] Server response:', r);
-                    
                     if (r.message && r.message.items) {
                         console.log('[DEBUG] Items received:', r.message.items.length);
                         console.log('[DEBUG] First few items:', r.message.items.slice(0, 3));
@@ -521,11 +574,6 @@ function show_cost_center_dialog(frm) {
                             row.conversion_factor = item.conversion_factor;
                             row.s_warehouse = item.warehouse;
                             
-                            // Set cost center if provided
-                            if (values.cost_center) {
-                                row.cost_center = values.cost_center;
-                            }
-                            
                             if (frm.doc.purpose === 'Material Transfer') {
                                 row.t_warehouse = frm.doc.to_warehouse;
                             }
@@ -537,43 +585,24 @@ function show_cost_center_dialog(frm) {
                         frm.refresh_field('items');
                         dialog.hide();
                         
-                        let message = '';
-                        if (values.cost_center && values.item_group) {
-                            message = __('{0} items added successfully from cost center {1} and item group {2}', [r.message.items.length, values.cost_center, values.item_group]);
-                        } else if (values.cost_center) {
-                            message = __('{0} items added successfully from cost center {1}', [r.message.items.length, values.cost_center]);
-                        } else if (values.item_group) {
-                            message = __('{0} items added successfully from item group {1}', [r.message.items.length, values.item_group]);
-                        } else {
-                            message = __('{0} items added successfully from warehouses', [r.message.items.length]);
-                        }
-                        
                         frappe.show_alert({
-                            message: message,
+                            message: __('{0} items added successfully', [r.message.items.length]),
                             indicator: 'green'
                         });
                     } else {
-                        console.log('[DEBUG] No items in response');
-                        let message = '';
-                        if (values.cost_center && values.item_group) {
-                            message = __('No items found in selected warehouses for cost center {0} and item group {1}', [values.cost_center, values.item_group]);
-                        } else if (values.cost_center) {
-                            message = __('No items found in selected warehouses for cost center {0}', [values.cost_center]);
-                        } else if (values.item_group) {
-                            message = __('No items found in selected warehouses for item group {0}', [values.item_group]);
-                        } else {
-                            message = __('No items found in selected warehouses');
-                        }
-                        frappe.msgprint(message);
+                        frappe.msgprint(__('No items found'));
                     }
                 },
                 error: function(r) {
-                    console.log('[DEBUG] Server error:', r);
+                    console.error('[DEBUG] Server error:', r);
                     frappe.msgprint(__('Error fetching items: {0}', [r.message || 'Unknown error']));
                 }
             });
         }
     });
+    
+    // Add a default row to warehouse table
+    dialog.fields_dict.warehouse_table.df.data = [{}];
     
     dialog.show();
 }
