@@ -30,3 +30,64 @@ def get_expense_account(doc, method):
         except Exception as e:
             frappe.log_error(f"Error setting expense account: {str(e)}", "Stock Entry Expense Account Error")
             frappe.msgprint(f"Error setting expense account: {str(e)}", indicator="red")
+
+
+@frappe.whitelist()
+def get_items_from_source(source_type, source, include_zero_qty=False, company=None):
+    """Get items from warehouse or sales order for Stock Entry"""
+    try:
+        items = []
+        
+        if source_type == 'Warehouse':
+            # Get items from warehouse (Bin table)
+            bin_filters = {"warehouse": source}
+            if not include_zero_qty:
+                bin_filters["actual_qty"] = [">", 0]
+            
+            bins = frappe.get_all("Bin", 
+                filters=bin_filters,
+                fields=["item_code", "actual_qty", "valuation_rate"],
+                order_by="item_code"
+            )
+            
+            for bin in bins:
+                item_doc = frappe.get_cached_doc("Item", bin.item_code)
+                items.append({
+                    "item_code": bin.item_code,
+                    "item_name": item_doc.item_name,
+                    "qty": bin.actual_qty,
+                    "uom": item_doc.stock_uom,
+                    "stock_uom": item_doc.stock_uom,
+                    "conversion_factor": 1.0,
+                    "warehouse": source,
+                    "rate": bin.valuation_rate,
+                    "valuation_rate": bin.valuation_rate
+                })
+                
+        elif source_type == 'Sales Order':
+            # Get items from sales order
+            so_items = frappe.get_all("Sales Order Item",
+                filters={"parent": source},
+                fields=["item_code", "qty", "rate", "warehouse", "uom", "conversion_factor"],
+                order_by="idx"
+            )
+            
+            for so_item in so_items:
+                item_doc = frappe.get_cached_doc("Item", so_item.item_code)
+                items.append({
+                    "item_code": so_item.item_code,
+                    "item_name": item_doc.item_name,
+                    "qty": so_item.qty,
+                    "uom": so_item.uom or item_doc.stock_uom,
+                    "stock_uom": item_doc.stock_uom,
+                    "conversion_factor": so_item.conversion_factor or 1.0,
+                    "warehouse": so_item.warehouse,
+                    "rate": so_item.rate,
+                    "valuation_rate": 0
+                })
+        
+        return {"items": items}
+        
+    except Exception as e:
+        frappe.log_error(title="get_items_from_source error", message=frappe.get_traceback())
+        frappe.throw(f"Error fetching items: {str(e)}")
