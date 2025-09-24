@@ -154,10 +154,12 @@ def get_items_from_source(source_type, source, warehouses=None, cost_center=None
                     
                     print(f"[DEBUG] Adding item {bin.item_code} with item_group '{item_doc.item_group}'")
                     
+                    # Avoid negative quantities; clamp to zero to reflect available stock only
+                    safe_qty = bin.actual_qty if (bin.actual_qty or 0) > 0 else 0
                     item_data = {
                         "item_code": bin.item_code,
                         "item_name": item_doc.item_name,
-                        "qty": bin.actual_qty,
+                        "qty": safe_qty,
                         "uom": item_doc.stock_uom,
                         "stock_uom": item_doc.stock_uom,
                         "conversion_factor": 1.0,
@@ -192,10 +194,11 @@ def get_items_from_source(source_type, source, warehouses=None, cost_center=None
             
             for bin in bins:
                 item_doc = frappe.get_cached_doc("Item", bin.item_code)
+                safe_qty = bin.actual_qty if (bin.actual_qty or 0) > 0 else 0
                 items.append({
                     "item_code": bin.item_code,
                     "item_name": item_doc.item_name,
-                    "qty": bin.actual_qty,
+                    "qty": safe_qty,
                     "uom": item_doc.stock_uom,
                     "stock_uom": item_doc.stock_uom,
                     "conversion_factor": 1.0,

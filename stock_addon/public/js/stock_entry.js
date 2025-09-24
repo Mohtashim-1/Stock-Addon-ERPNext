@@ -124,6 +124,7 @@ function show_warehouse_dialog(frm) {
                         }
                         
                         r.message.items.forEach(item => {
+                            if (!(flt(item.qty) > 0)) { return; }
                             const row = frm.add_child('items');
                             row.item_code = item.item_code;
                             row.item_name = item.item_name;
@@ -139,6 +140,8 @@ function show_warehouse_dialog(frm) {
                             
                             row.basic_rate = item.rate || 0;
                             row.valuation_rate = item.valuation_rate || 0;
+                            // Ensure Qty as per Stock UOM is populated
+                            row.transfer_qty = flt(row.qty) * flt(row.conversion_factor || 1);
                         });
                         
                         frm.refresh_field('items');
@@ -217,6 +220,7 @@ function show_sales_order_dialog(frm) {
                         }
                         
                         r.message.items.forEach(item => {
+                            if (!(flt(item.qty) > 0)) { return; }
                             const row = frm.add_child('items');
                             row.item_code = item.item_code;
                             row.item_name = item.item_name;
@@ -232,6 +236,8 @@ function show_sales_order_dialog(frm) {
                             
                             row.basic_rate = item.rate || 0;
                             row.valuation_rate = item.valuation_rate || 0;
+                            // Ensure Qty as per Stock UOM is populated
+                            row.transfer_qty = flt(row.qty) * flt(row.conversion_factor || 1);
                         });
                         
                         frm.refresh_field('items');
@@ -351,6 +357,7 @@ function show_warehouse_with_sales_order_dialog(frm) {
                         }
                         
                         r.message.items.forEach(item => {
+                            if (!(flt(item.qty) > 0)) { return; }
                             const row = frm.add_child('items');
                             row.item_code = item.item_code;
                             row.item_name = item.item_name;
@@ -371,6 +378,8 @@ function show_warehouse_with_sales_order_dialog(frm) {
                             
                             row.basic_rate = item.rate || 0;
                             row.valuation_rate = item.valuation_rate || 0;
+                            // Ensure Qty as per Stock UOM is populated
+                            row.transfer_qty = flt(row.qty) * flt(row.conversion_factor || 1);
                         });
                         
                         frm.refresh_field('items');
@@ -585,6 +594,7 @@ function show_cost_center_dialog(frm) {
                         }
                         
                         r.message.items.forEach(item => {
+                            if (!(flt(item.qty) > 0)) { return; }
                             const row = frm.add_child('items');
                             row.item_code = item.item_code;
                             row.item_name = item.item_name;
@@ -600,6 +610,8 @@ function show_cost_center_dialog(frm) {
                             
                             row.basic_rate = item.rate || 0;
                             row.valuation_rate = item.valuation_rate || 0;
+                            // Ensure Qty as per Stock UOM is populated
+                            row.transfer_qty = flt(row.qty) * flt(row.conversion_factor || 1);
                         });
                         
                         frm.refresh_field('items');
