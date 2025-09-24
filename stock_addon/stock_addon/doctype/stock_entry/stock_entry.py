@@ -10,16 +10,31 @@ def set_cost_center_to_child_items(doc, method):
 
 def get_expense_account(doc, method):
     """Set expense account from Stock Entry Type custom_account field"""
-    if doc.stock_entry_type:
-        try:
-            # Get the Stock Entry Type document
-            stock_entry_type_doc = frappe.get_doc("Stock Entry Type", doc.stock_entry_type)
-            
-            # Check if custom_account field exists and has a value
-            if hasattr(stock_entry_type_doc, 'custom_account') and stock_entry_type_doc.custom_account:
-                doc.expense_account = stock_entry_type_doc.custom_account
-        except Exception as e:
-            frappe.log_error(f"Error setting expense account: {str(e)}")
+    try:
+        if not getattr(doc, "stock_entry_type", None):
+            frappe.msgprint("Stock Entry Type is not set")
+
+            return
+
+        stock_entry_type_doc = frappe.get_doc("Stock Entry Type", doc.stock_entry_type)
+        expense_account = getattr(stock_entry_type_doc, "custom_account", None) 
+        frappe.msgprint(f"Stock Entry Type: {stock_entry_type_doc}")
+        frappe.msgprint(f"Expense Account: {expense_account}")
+        if not expense_account:
+            return
+
+        # Set on parent
+        doc.expense_account = expense_account
+        frappe.msgprint(f"Expense Account: {doc.expense_account}")
+
+        # Also set on child rows (ERPNext reads Difference Account from row)
+        if getattr(doc, "items", None):
+            for item in doc.items:
+                frappe.msgprint(f"Item: {item.item_code}")
+                item.expense_account = expense_account
+                frappe.msgprint(f"Item Expense Account: {item.expense_account}")
+    except Exception as e:
+        frappe.log_error(f"Error setting expense account on Stock Entry: {str(e)}")
 
 
 def get_all_child_item_groups(item_group_name):
