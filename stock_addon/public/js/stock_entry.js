@@ -5,6 +5,63 @@ frappe.ui.form.on("Stock Entry", {
         } else {
             frm.set_df_property("custom_cost_center", "reqd", 0); 
         }
+    },
+    
+    items_add: function(frm, cdt, cdn) {
+        var row = frappe.get_doc(cdt, cdn);
+        console.log('[STOCK ENTRY DEBUG] items_add triggered for row:', cdn);
+        
+        // Use setTimeout to ensure item_code is set (Excel paste may set fields async)
+        setTimeout(function() {
+            row = locals[cdt][cdn];
+            console.log('[STOCK ENTRY DEBUG] items_add - row data:', {
+                item_code: row.item_code,
+                uom: row.uom,
+                stock_uom: row.stock_uom,
+                qty: row.qty
+            });
+            
+            // Set qty to 1 if not set
+            if (!row.qty || row.qty == 0) {
+                console.log('[STOCK ENTRY DEBUG] Setting qty to 1');
+                frappe.model.set_value(cdt, cdn, 'qty', 1);
+            }
+            
+            // If UOM or stock_uom is not set, fetch from item
+            if (row.item_code && (!row.uom || !row.stock_uom)) {
+                console.log('[STOCK ENTRY DEBUG] Fetching UOM for item:', row.item_code);
+                frappe.call({
+                    method: 'frappe.client.get_value',
+                    args: {
+                        doctype: 'Item',
+                        filters: { name: row.item_code },
+                        fieldname: ['stock_uom']
+                    },
+                    callback: function(r) {
+                        console.log('[STOCK ENTRY DEBUG] Server response for UOM:', r.message);
+                        if (r.message && r.message.stock_uom) {
+                            // Set stock_uom if not set
+                            if (!row.stock_uom) {
+                                console.log('[STOCK ENTRY DEBUG] Setting stock_uom to:', r.message.stock_uom);
+                                frappe.model.set_value(cdt, cdn, 'stock_uom', r.message.stock_uom);
+                            }
+                            // Set uom to stock_uom if not already set
+                            if (!row.uom) {
+                                console.log('[STOCK ENTRY DEBUG] Setting uom to:', r.message.stock_uom);
+                                frappe.model.set_value(cdt, cdn, 'uom', r.message.stock_uom);
+                            }
+                        } else {
+                            console.log('[STOCK ENTRY DEBUG] No UOM data returned from server');
+                        }
+                    },
+                    error: function(r) {
+                        console.error('[STOCK ENTRY DEBUG] Error fetching UOM:', r);
+                    }
+                });
+            } else {
+                console.log('[STOCK ENTRY DEBUG] UOM fields already populated or no item_code');
+            }
+        }, 100);
     }
 });
 
@@ -639,3 +696,57 @@ function show_cost_center_dialog(frm) {
     
     dialog.show();
 }
+
+// Handle item_code changes to auto-populate UOM fields
+frappe.ui.form.on('Stock Entry Detail', {
+    item_code: function(frm, cdt, cdn) {
+        var row = frappe.get_doc(cdt, cdn);
+        console.log('[STOCK ENTRY DEBUG] item_code triggered:', {
+            item_code: row.item_code,
+            uom: row.uom,
+            stock_uom: row.stock_uom,
+            qty: row.qty
+        });
+        
+        // Set qty to 1 if not set
+        if (!row.qty || row.qty == 0) {
+            console.log('[STOCK ENTRY DEBUG] Setting qty to 1 in item_code handler');
+            frappe.model.set_value(cdt, cdn, 'qty', 1);
+        }
+        
+        // Fetch item details if item_code is set but UOM fields are missing
+        if (row.item_code && (!row.uom || !row.stock_uom)) {
+            console.log('[STOCK ENTRY DEBUG] Fetching UOM for item in item_code handler:', row.item_code);
+            frappe.call({
+                method: 'frappe.client.get_value',
+                args: {
+                    doctype: 'Item',
+                    filters: { name: row.item_code },
+                    fieldname: ['stock_uom']
+                },
+                callback: function(r) {
+                    console.log('[STOCK ENTRY DEBUG] Server response for UOM in item_code handler:', r.message);
+                    if (r.message && r.message.stock_uom) {
+                        // Set stock_uom if not set
+                        if (!row.stock_uom) {
+                            console.log('[STOCK ENTRY DEBUG] Setting stock_uom to:', r.message.stock_uom);
+                            frappe.model.set_value(cdt, cdn, 'stock_uom', r.message.stock_uom);
+                        }
+                        // Set uom to stock_uom if not already set
+                        if (!row.uom) {
+                            console.log('[STOCK ENTRY DEBUG] Setting uom to:', r.message.stock_uom);
+                            frappe.model.set_value(cdt, cdn, 'uom', r.message.stock_uom);
+                        }
+                    } else {
+                        console.log('[STOCK ENTRY DEBUG] No UOM data returned from server in item_code handler');
+                    }
+                },
+                error: function(r) {
+                    console.error('[STOCK ENTRY DEBUG] Error fetching UOM in item_code handler:', r);
+                }
+            });
+        } else {
+            console.log('[STOCK ENTRY DEBUG] UOM fields already populated or no item_code in item_code handler');
+        }
+    }
+});
