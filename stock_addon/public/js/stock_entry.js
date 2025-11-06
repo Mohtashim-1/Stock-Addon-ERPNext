@@ -7,6 +7,24 @@ frappe.ui.form.on("Stock Entry", {
         }
     },
     
+    // Handle stock_entry_type changes to update all rows
+    stock_entry_type: function(frm) {
+        if (frm.doc.stock_entry_type === 'Stitched Products' && frm.doc.items) {
+            // Update all existing rows when type changes to "Stitched Products"
+            frm.doc.items.forEach(function(item) {
+                var cdt = item.doctype || 'Stock Entry Detail';
+                var cdn = item.name;
+                if (item.s_warehouse && item.s_warehouse !== "") {
+                    // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
+                } else {
+                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
+                }
+            });
+        }
+    },
+    
     items_add: function(frm, cdt, cdn) {
         var row = frappe.get_doc(cdt, cdn);
         console.log('[STOCK ENTRY DEBUG] items_add triggered for row:', cdn);
@@ -14,17 +32,38 @@ frappe.ui.form.on("Stock Entry", {
         // Use setTimeout to ensure item_code is set (Excel paste may set fields async)
         setTimeout(function() {
             row = locals[cdt][cdn];
+            
+            // Check if row still exists
+            if (!row) {
+                console.log('[STOCK ENTRY DEBUG] Row deleted in items_add');
+                return;
+            }
+            
             console.log('[STOCK ENTRY DEBUG] items_add - row data:', {
                 item_code: row.item_code,
                 uom: row.uom,
                 stock_uom: row.stock_uom,
-                qty: row.qty
+                qty: row.qty,
+                stock_entry_type: frm.doc.stock_entry_type
             });
             
             // Set qty to 1 if not set
             if (!row.qty || row.qty == 0) {
                 console.log('[STOCK ENTRY DEBUG] Setting qty to 1');
                 frappe.model.set_value(cdt, cdn, 'qty', 1);
+            }
+            
+            // Set allow_zero_valuation_rate based on s_warehouse for "Stitched Products"
+            if (frm.doc.stock_entry_type === 'Stitched Products') {
+                if (row.s_warehouse && row.s_warehouse !== "") {
+                    // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                    console.log('[STOCK ENTRY DEBUG] Setting allow_zero_valuation_rate to 0 (s_warehouse is present)');
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
+                } else {
+                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
+                    console.log('[STOCK ENTRY DEBUG] Setting allow_zero_valuation_rate to 1 (s_warehouse is empty)');
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
+                }
             }
             
             // If UOM or stock_uom is not set, fetch from item
@@ -39,14 +78,22 @@ frappe.ui.form.on("Stock Entry", {
                     },
                     callback: function(r) {
                         console.log('[STOCK ENTRY DEBUG] Server response for UOM:', r.message);
+                        
+                        // Re-check if row still exists
+                        var current_row = locals[cdt][cdn];
+                        if (!current_row) {
+                            console.log('[STOCK ENTRY DEBUG] Row deleted during fetch in items_add');
+                            return;
+                        }
+                        
                         if (r.message && r.message.stock_uom) {
                             // Set stock_uom if not set
-                            if (!row.stock_uom) {
+                            if (!current_row.stock_uom) {
                                 console.log('[STOCK ENTRY DEBUG] Setting stock_uom to:', r.message.stock_uom);
                                 frappe.model.set_value(cdt, cdn, 'stock_uom', r.message.stock_uom);
                             }
                             // Set uom to stock_uom if not already set
-                            if (!row.uom) {
+                            if (!current_row.uom) {
                                 console.log('[STOCK ENTRY DEBUG] Setting uom to:', r.message.stock_uom);
                                 frappe.model.set_value(cdt, cdn, 'uom', r.message.stock_uom);
                             }
@@ -88,6 +135,21 @@ frappe.ui.form.on('Stock Entry', {
             frm.add_custom_button(__('Warehouse with Cost Center'), function() {
                 show_cost_center_dialog(frm);
             }, __('Get Items From'));
+        }
+        
+        // Update allow_zero_valuation_rate for all rows when form loads (for "Stitched Products")
+        if (frm.doc.stock_entry_type === 'Stitched Products' && frm.doc.items) {
+            frm.doc.items.forEach(function(item) {
+                var cdt = item.doctype || 'Stock Entry Detail';
+                var cdn = item.name;
+                if (item.s_warehouse && item.s_warehouse !== "") {
+                    // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
+                } else {
+                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
+                }
+            });
         }
     }
 });
@@ -697,56 +759,188 @@ function show_cost_center_dialog(frm) {
     dialog.show();
 }
 
-// Handle item_code changes to auto-populate UOM fields
-frappe.ui.form.on('Stock Entry Detail', {
-    item_code: function(frm, cdt, cdn) {
-        var row = frappe.get_doc(cdt, cdn);
-        console.log('[STOCK ENTRY DEBUG] item_code triggered:', {
-            item_code: row.item_code,
-            uom: row.uom,
-            stock_uom: row.stock_uom,
-            qty: row.qty
-        });
+// Function to fetch and set UOM for a row
+function fetch_and_set_uom(frm, cdt, cdn, is_item_code_trigger) {
+    try {
+        var row = locals[cdt][cdn];
         
-        // Set qty to 1 if not set
-        if (!row.qty || row.qty == 0) {
-            console.log('[STOCK ENTRY DEBUG] Setting qty to 1 in item_code handler');
-            frappe.model.set_value(cdt, cdn, 'qty', 1);
+        if (!row) return;
+        
+        // Only process if item_code exists and UOM fields are missing
+        if (!row.item_code || (row.uom && row.stock_uom)) {
+            return;
         }
         
-        // Fetch item details if item_code is set but UOM fields are missing
-        if (row.item_code && (!row.uom || !row.stock_uom)) {
-            console.log('[STOCK ENTRY DEBUG] Fetching UOM for item in item_code handler:', row.item_code);
-            frappe.call({
-                method: 'frappe.client.get_value',
-                args: {
-                    doctype: 'Item',
-                    filters: { name: row.item_code },
-                    fieldname: ['stock_uom']
-                },
-                callback: function(r) {
-                    console.log('[STOCK ENTRY DEBUG] Server response for UOM in item_code handler:', r.message);
+        console.log('[STOCK ENTRY DEBUG] Fetching UOM for item:', row.item_code, 'trigger:', is_item_code_trigger ? 'item_code' : 'other');
+        
+        frappe.call({
+            method: 'frappe.client.get_value',
+            args: {
+                doctype: 'Item',
+                filters: { name: row.item_code },
+                fieldname: ['stock_uom']
+            },
+            callback: function(r) {
+                try {
+                    var current_row = locals[cdt][cdn];
+                    if (!current_row) {
+                        console.log('[STOCK ENTRY DEBUG] Row deleted during fetch');
+                        return;
+                    }
+                    
                     if (r.message && r.message.stock_uom) {
-                        // Set stock_uom if not set
-                        if (!row.stock_uom) {
+                        if (!current_row.stock_uom) {
                             console.log('[STOCK ENTRY DEBUG] Setting stock_uom to:', r.message.stock_uom);
                             frappe.model.set_value(cdt, cdn, 'stock_uom', r.message.stock_uom);
                         }
-                        // Set uom to stock_uom if not already set
-                        if (!row.uom) {
+                        if (!current_row.uom) {
                             console.log('[STOCK ENTRY DEBUG] Setting uom to:', r.message.stock_uom);
                             frappe.model.set_value(cdt, cdn, 'uom', r.message.stock_uom);
                         }
                     } else {
-                        console.log('[STOCK ENTRY DEBUG] No UOM data returned from server in item_code handler');
+                        console.log('[STOCK ENTRY DEBUG] No UOM returned for item:', row.item_code);
                     }
-                },
-                error: function(r) {
-                    console.error('[STOCK ENTRY DEBUG] Error fetching UOM in item_code handler:', r);
+                    
+                    // Retry after a delay if UOM is still missing (for timing issues)
+                    setTimeout(function() {
+                        var check_row = locals[cdt][cdn];
+                        if (check_row && check_row.item_code && (!check_row.uom || !check_row.stock_uom)) {
+                            console.log('[STOCK ENTRY DEBUG] Retrying UOM fetch for item:', check_row.item_code);
+                            fetch_and_set_uom(frm, cdt, cdn, false);
+                        }
+                    }, 300);
+                } catch (e) {
+                    console.error('[STOCK ENTRY DEBUG] Error in callback:', e);
                 }
+            },
+            error: function(r) {
+                console.error('[STOCK ENTRY DEBUG] Error fetching UOM:', r);
+                
+                // Check if error is due to inactive item - skip this row
+                if (r.message && r.message.indexOf && r.message.indexOf('is not active or end of life') !== -1) {
+                    console.log('[STOCK ENTRY DEBUG] Item is inactive, skipping:', row.item_code);
+                    return; // Don't retry for inactive items
+                }
+                
+                // Retry on other errors
+                setTimeout(function() {
+                    var check_row = locals[cdt][cdn];
+                    if (check_row && check_row.item_code && (!check_row.uom || !check_row.stock_uom)) {
+                        console.log('[STOCK ENTRY DEBUG] Retrying UOM fetch after error for item:', check_row.item_code);
+                        fetch_and_set_uom(frm, cdt, cdn, false);
+                    }
+                }, 300);
+            }
+        });
+    } catch (e) {
+        console.error('[STOCK ENTRY DEBUG] Error in fetch_and_set_uom:', e);
+    }
+}
+
+// Handle item_code changes to auto-populate UOM fields
+frappe.ui.form.on('Stock Entry Detail', {
+    item_code: function(frm, cdt, cdn) {
+        try {
+            var row = locals[cdt][cdn];
+            
+            // Check if row exists
+            if (!row) {
+                return;
+            }
+            
+            console.log('[STOCK ENTRY DEBUG] item_code triggered:', {
+                item_code: row.item_code,
+                uom: row.uom,
+                stock_uom: row.stock_uom,
+                qty: row.qty,
+                stock_entry_type: frm.doc.stock_entry_type
             });
-        } else {
-            console.log('[STOCK ENTRY DEBUG] UOM fields already populated or no item_code in item_code handler');
+            
+            // Set qty to 1 if not set
+            if (!row.qty || row.qty == 0) {
+                frappe.model.set_value(cdt, cdn, 'qty', 1);
+            }
+            
+            // Set allow_zero_valuation_rate based on s_warehouse for "Stitched Products"
+            if (frm.doc.stock_entry_type === 'Stitched Products') {
+                // Check the current row's s_warehouse
+                var current_row = locals[cdt][cdn];
+                if (current_row) {
+                    if (current_row.s_warehouse && current_row.s_warehouse !== "") {
+                        // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                        frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
+                    } else {
+                        // If s_warehouse is empty, set allow_zero_valuation_rate = 1
+                        frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
+                    }
+                }
+            }
+            
+            // Fetch UOM - will be called again with delay
+            if (row.item_code && (!row.uom || !row.stock_uom)) {
+                fetch_and_set_uom(frm, cdt, cdn, true);
+            }
+        } catch (e) {
+            console.error('[STOCK ENTRY DEBUG] Error in item_code handler:', e);
+            // Continue processing - don't block other items
+        }
+    },
+    
+    // Also trigger on uom change to catch paste scenarios
+    uom: function(frm, cdt, cdn) {
+        try {
+            var row = locals[cdt][cdn];
+            if (row && row.item_code && (!row.uom || !row.stock_uom)) {
+                // Use a small delay to let the async paste complete
+                setTimeout(function() {
+                    fetch_and_set_uom(frm, cdt, cdn, false);
+                }, 200);
+            }
+        } catch (e) {
+            console.error('[STOCK ENTRY DEBUG] Error in uom handler:', e);
+        }
+    },
+    
+    // Handle s_warehouse changes for "Stitched Products"
+    s_warehouse: function(frm, cdt, cdn) {
+        try {
+            if (frm.doc.stock_entry_type === 'Stitched Products') {
+                var row = locals[cdt][cdn];
+                if (row) {
+                    if (row.s_warehouse && row.s_warehouse !== "") {
+                        // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                        frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
+                    } else {
+                        // If s_warehouse is empty, set allow_zero_valuation_rate = 1
+                        frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
+                    }
+                }
+            }
+        } catch (e) {
+            console.error('[STOCK ENTRY DEBUG] Error in s_warehouse handler:', e);
+        }
+    },
+    
+    // Trigger when entire row is refreshed
+    refresh: function(frm, cdt, cdn) {
+        try {
+            var row = locals[cdt][cdn];
+            if (row && row.item_code && (!row.uom || !row.stock_uom)) {
+                fetch_and_set_uom(frm, cdt, cdn, false);
+            }
+            
+            // Update allow_zero_valuation_rate when row is refreshed (for "Stitched Products")
+            if (frm.doc.stock_entry_type === 'Stitched Products' && row) {
+                if (row.s_warehouse && row.s_warehouse !== "") {
+                    // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
+                } else {
+                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
+                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
+                }
+            }
+        } catch (e) {
+            console.error('[STOCK ENTRY DEBUG] Error in refresh handler:', e);
         }
     }
 });
