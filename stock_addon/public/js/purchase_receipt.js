@@ -114,6 +114,52 @@ frappe.after_ajax(() => {
     }
 });
 
+// Handle allow_zero_valuation_rate - set rate to 0 when enabled
+frappe.ui.form.on('Purchase Receipt Item', {
+    allow_zero_valuation_rate: function(frm, cdt, cdn) {
+        console.log('allow_zero_valuation_rate event triggered');
+        var item = locals[cdt][cdn];
+        console.log('Item:', item);
+        console.log('allow_zero_valuation_rate value:', item.allow_zero_valuation_rate);
+        
+        if (item.allow_zero_valuation_rate) {
+            console.log('Setting rate to 0 for item:', item.item_code);
+            // Set rate and related fields to 0 when allow_zero_valuation_rate is enabled
+            frappe.model.set_value(cdt, cdn, 'rate', 0.0);
+            frappe.model.set_value(cdt, cdn, 'price_list_rate', 0.0);
+            
+            // Refresh the row to recalculate amounts
+            frm.refresh_field('items');
+            
+            frappe.show_alert({
+                message: __('Rate set to 0 for zero valuation item'),
+                indicator: 'green'
+            }, 5);
+        }
+    },
+    rate: function(frm, cdt, cdn) {
+        var item = locals[cdt][cdn];
+        // If allow_zero_valuation_rate is enabled and rate is not 0, reset it to 0
+        if (item.allow_zero_valuation_rate && parseFloat(item.rate || 0) != 0) {
+            console.log('Resetting rate to 0 because allow_zero_valuation_rate is enabled');
+            setTimeout(function() {
+                frappe.model.set_value(cdt, cdn, 'rate', 0.0);
+                frappe.show_alert({
+                    message: __('Rate cannot be changed for zero valuation items'),
+                    indicator: 'orange'
+                }, 5);
+            }, 100);
+        }
+    },
+    items_add: function(frm, cdt, cdn) {
+        // When a new item is added, check if it has allow_zero_valuation_rate set
+        var item = locals[cdt][cdn];
+        if (item.allow_zero_valuation_rate) {
+            console.log('New item added with allow_zero_valuation_rate, setting rate to 0');
+            frappe.model.set_value(cdt, cdn, 'rate', 0.0);
+        }
+    }
+});
+
 // Additional debug: Check if the script is loaded
-console.log("Purchase Receipt script loaded successfully");
-frappe.msgprint("Purchase Receipt script loaded - check console for debug messages");
+console.log("Purchase Receipt custom script loaded successfully with allow_zero_valuation_rate handler");
