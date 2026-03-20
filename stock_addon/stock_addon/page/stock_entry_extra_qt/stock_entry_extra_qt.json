@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2026-03-20 03:38:12.856146",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-03-20 03:38:12.856146",
+ "modified_by": "Administrator",
+ "module": "Stock Addon",
+ "name": "stock-entry-extra-qt",
+ "owner": "Administrator",
+ "page_name": "stock-entry-extra-qt",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Stock Entry Extra Qty"
+}
