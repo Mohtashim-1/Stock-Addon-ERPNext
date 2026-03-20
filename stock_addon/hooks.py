@@ -149,7 +149,8 @@ doc_events = {
     },
     "Stock Entry": {
         "on_submit": [
-            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins",
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.notify_system_managers_for_bom_exceptions"
         ],
         "on_cancel": [
             "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
@@ -161,7 +162,8 @@ doc_events = {
     },
     "Stock Reconciliation": {
         "on_submit": [
-            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins",
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.notify_system_managers_for_bom_exceptions"
         ],
         "on_cancel": [
             "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
