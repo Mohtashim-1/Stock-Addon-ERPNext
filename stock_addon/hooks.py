@@ -175,6 +175,9 @@ doc_events = {
     "Material Request": {
         "validate": "stock_addon.stock_addon.doctype.material_request.material_request.calculate_total_qty",
     },
+    "Subcontracting Receipt": {
+        "validate": "stock_addon.api.propagate_subcontracting_receipt_cost_center",
+    },
     "Landed Cost Voucher": {
         "on_submit": "stock_addon.stock_addon.doctype.landed_cost_voucher.landed_cost_voucher.create_purchase_invoice_from_landed_cost_voucher_taxes",
     },
@@ -278,4 +281,3 @@ override_doctype_dashboards = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
