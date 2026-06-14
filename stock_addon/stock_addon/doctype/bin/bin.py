@@ -72,8 +72,6 @@ def recalc_impacted_bins(doc, method):
             frappe.log_error(frappe.get_traceback(),
                              f"recalc_impacted_bins failure for Bin {b}")
 
-    frappe.db.commit()
-
 class Bin(ERPBin):
     def recalculate_qty(self):
         super().recalculate_qty()
