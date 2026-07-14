@@ -118,4 +118,5 @@ frappe.query_reports["Stock Ledger Report"] = {
 	},
 };
 
-erpnext.utils.add_inventory_dimensions("Stock Ledger", 10);
+// Must match this report's key in frappe.query_reports (not ERPNext "Stock Ledger")
+erpnext.utils.add_inventory_dimensions("Stock Ledger Report", 10);

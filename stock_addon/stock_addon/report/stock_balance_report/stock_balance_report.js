@@ -134,4 +134,5 @@ frappe.query_reports["Stock Balance Report"] = {
 	},
 };
 
-erpnext.utils.add_inventory_dimensions("Stock Balance", 8);
+// Must match this report's key in frappe.query_reports (not ERPNext "Stock Balance")
+erpnext.utils.add_inventory_dimensions("Stock Balance Report", 8);
