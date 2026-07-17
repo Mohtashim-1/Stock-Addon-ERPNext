@@ -5,7 +5,38 @@ frappe.ui.form.on("Stock Entry", {
         } else {
             frm.set_df_property("custom_cost_center", "reqd", 0); 
         }
+		frm.trigger("toggle_pp_reservation_fields");
     },
+
+	toggle_pp_reservation_fields(frm) {
+		const show =
+			frm.doc.purpose === "Material Transfer for Manufacture" ||
+			frm.doc.stock_entry_type === "Material Transfer for Manufacture";
+		["custom_against_production_plan", "custom_against_sales_order"].forEach((fn) => {
+			if (frm.fields_dict[fn]) {
+				frm.toggle_display(fn, show || !!frm.doc[fn]);
+			}
+		});
+	},
+
+	purpose(frm) {
+		frm.trigger("toggle_pp_reservation_fields");
+	},
+
+	custom_against_production_plan(frm) {
+		if (!frm.doc.custom_against_production_plan) return;
+		frappe.db
+			.get_list("Production Plan Sales Order", {
+				filters: { parent: frm.doc.custom_against_production_plan },
+				fields: ["sales_order"],
+				limit: 5,
+			})
+			.then((rows) => {
+				if (rows.length === 1) {
+					frm.set_value("custom_against_sales_order", rows[0].sales_order);
+				}
+			});
+	},
     
     // Handle stock_entry_type changes to update all rows
     stock_entry_type: function(frm) {

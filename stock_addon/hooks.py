@@ -150,17 +150,22 @@ doc_events = {
         ]
     },
     "Stock Entry": {
-        "on_submit": [
-            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins",
-            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.notify_system_managers_for_bom_exceptions"
-        ],
-        "on_cancel": [
-            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins"
-        ],
         "validate": [
             "stock_addon.stock_addon.doctype.stock_entry.stock_entry.set_cost_center_to_child_items",
-            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.get_expense_account"
-        ]
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.get_expense_account",
+            "stock_addon.stock_addon.doctype.stock_entry.pp_reserved_stock.validate_against_reservation_refs",
+        ],
+        "before_submit": [
+            "stock_addon.stock_addon.doctype.stock_entry.pp_reserved_stock.release_pp_reserved_stock_before_submit",
+        ],
+        "on_submit": [
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins",
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.notify_system_managers_for_bom_exceptions",
+        ],
+        "on_cancel": [
+            "stock_addon.stock_addon.doctype.stock_entry.pp_reserved_stock.restore_pp_reserved_stock_on_cancel",
+            "stock_addon.stock_addon.doctype.bin.bin.recalc_impacted_bins",
+        ],
     },
     "Stock Reconciliation": {
         "on_submit": [
