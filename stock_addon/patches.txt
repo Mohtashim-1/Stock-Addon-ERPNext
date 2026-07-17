@@ -4,3 +4,4 @@
 
 [post_model_sync]
 stock_addon.patches.v1_0.add_ste_pp_reservation_fields
+stock_addon.patches.v1_0.add_sre_unreserve_fields

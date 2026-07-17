@@ -35,6 +35,7 @@ doctype_js = {
     "Stock Entry" : "public/js/stock_entry.js",
     "Stock Reconciliation" : "public/js/stock_reconcillation.js",
     "Landed Cost Voucher" : "public/js/landed_cost_voucher.js",
+    "Stock Reservation Entry": "public/js/stock_reservation_entry.js",
     # "Delivery Note" : "public/js/delivery_note.js"
     }
 doctype_list_js = {
