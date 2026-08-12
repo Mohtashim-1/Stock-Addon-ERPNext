@@ -151,6 +151,9 @@ doc_events = {
         ]
     },
     "Stock Entry": {
+        "before_validate": [
+            "stock_addon.stock_addon.doctype.stock_entry.stock_entry.auto_allocate_stitched_products_fg_cost",
+        ],
         "validate": [
             "stock_addon.stock_addon.doctype.stock_entry.stock_entry.set_cost_center_to_child_items",
             "stock_addon.stock_addon.doctype.stock_entry.stock_entry.get_expense_account",

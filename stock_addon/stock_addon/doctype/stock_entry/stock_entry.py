@@ -1,11 +1,97 @@
 import frappe
-import json
+from frappe.utils import cint, flt
+from erpnext.stock.stock_ledger import get_valuation_rate
+
 
 def set_cost_center_to_child_items(doc, method):
     if doc.custom_cost_center:
         for item in doc.items:
             item.cost_center = doc.custom_cost_center
             # item.save()
+
+
+def auto_allocate_stitched_products_fg_cost(doc, method=None):
+	"""Auto-split outgoing material cost onto multiple finished goods for Stitched Products.
+
+	ERPNext blocks Repack entries with >1 finished good unless every FG has
+	"Set Basic Rate Manually". For Stitched Products we compute rates by qty share
+	of outgoing (fabric) cost so save/submit works without manual entry.
+	"""
+	if (doc.purpose or "") != "Repack":
+		return
+	if (doc.stock_entry_type or "") != "Stitched Products":
+		return
+	if not doc.get("items"):
+		return
+
+	# Ensure finished / raw flags match warehouse sides
+	for row in doc.items:
+		if row.t_warehouse and not row.s_warehouse:
+			row.is_finished_item = 1
+		elif row.s_warehouse:
+			row.is_finished_item = 0
+
+	fg_rows = [row for row in doc.items if cint(row.is_finished_item) and row.item_code]
+	# Unique finished item codes (same logic as core validate_repack_entry)
+	unique_fg = {row.item_code for row in fg_rows}
+	if len(unique_fg) <= 1:
+		return
+
+	outgoing_cost = 0.0
+	for row in doc.items:
+		if not row.s_warehouse or not row.item_code:
+			continue
+		qty = flt(row.transfer_qty) or flt(row.qty)
+		if qty <= 0:
+			continue
+
+		# Respect Allow Zero Valuation Rate — do not fetch/keep a rate
+		if cint(row.allow_zero_valuation_rate):
+			row.basic_rate = 0
+			row.basic_amount = 0
+			if hasattr(row, "valuation_rate"):
+				row.valuation_rate = 0
+			continue
+
+		rate = flt(row.basic_rate) or flt(getattr(row, "valuation_rate", None))
+		if rate <= 0:
+			rate = flt(
+				get_valuation_rate(
+					row.item_code,
+					row.s_warehouse,
+					doc.doctype,
+					doc.name or "new-stock-entry",
+					cint(row.allow_zero_valuation_rate),
+					company=doc.company,
+					raise_error_if_no_rate=False,
+				)
+			)
+		if rate > 0:
+			row.basic_rate = rate
+			row.basic_amount = rate * qty
+			if hasattr(row, "valuation_rate"):
+				row.valuation_rate = rate
+			outgoing_cost += rate * qty
+
+	# Allocate only onto FG rows that are NOT marked for zero valuation
+	allocatable_fg = [row for row in fg_rows if not cint(row.allow_zero_valuation_rate)]
+	total_fg_qty = sum((flt(row.transfer_qty) or flt(row.qty)) for row in allocatable_fg)
+
+	for row in fg_rows:
+		qty = flt(row.transfer_qty) or flt(row.qty) or 1
+		if cint(row.allow_zero_valuation_rate):
+			row.basic_rate = 0
+			row.basic_amount = 0
+			if hasattr(row, "valuation_rate"):
+				row.valuation_rate = 0
+		elif outgoing_cost > 0 and total_fg_qty > 0:
+			amount = outgoing_cost * (qty / total_fg_qty)
+			row.basic_rate = amount / qty
+			row.basic_amount = amount
+			if hasattr(row, "valuation_rate"):
+				row.valuation_rate = row.basic_rate
+		# Multi-FG Repack requires this flag even when rate is zero
+		row.set_basic_rate_manually = 1
 
 
 def get_expense_account(doc, method):
@@ -18,21 +104,16 @@ def get_expense_account(doc, method):
 
         stock_entry_type_doc = frappe.get_doc("Stock Entry Type", doc.stock_entry_type)
         expense_account = getattr(stock_entry_type_doc, "custom_account", None) 
-        frappe.msgprint(f"Stock Entry Type: {stock_entry_type_doc}")
-        frappe.msgprint(f"Expense Account: {expense_account}")
         if not expense_account:
             return
 
         # Set on parent
         doc.expense_account = expense_account
-        frappe.msgprint(f"Expense Account: {doc.expense_account}")
 
         # Also set on child rows (ERPNext reads Difference Account from row)
         if getattr(doc, "items", None):
             for item in doc.items:
-                frappe.msgprint(f"Item: {item.item_code}")
                 item.expense_account = expense_account
-                frappe.msgprint(f"Item Expense Account: {item.expense_account}")
     except Exception as e:
         frappe.log_error(f"Error setting expense account on Stock Entry: {str(e)}")
 

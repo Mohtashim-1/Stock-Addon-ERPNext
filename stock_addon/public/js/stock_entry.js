@@ -48,10 +48,8 @@ frappe.ui.form.on("Stock Entry", {
                 if (item.s_warehouse && item.s_warehouse !== "") {
                     // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
                     frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
-                } else {
-                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
-                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
                 }
+
             });
         }
     },
@@ -87,13 +85,9 @@ frappe.ui.form.on("Stock Entry", {
             // Set allow_zero_valuation_rate based on s_warehouse for "Stitched Products"
             if (frm.doc.stock_entry_type === 'Stitched Products') {
                 if (row.s_warehouse && row.s_warehouse !== "") {
-                    // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
+                    // Outgoing rows should use valuation — clear allow_zero
                     console.log('[STOCK ENTRY DEBUG] Setting allow_zero_valuation_rate to 0 (s_warehouse is present)');
                     frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
-                } else {
-                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
-                    console.log('[STOCK ENTRY DEBUG] Setting allow_zero_valuation_rate to 1 (s_warehouse is empty)');
-                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
                 }
             }
             
@@ -176,10 +170,8 @@ frappe.ui.form.on('Stock Entry', {
                 if (item.s_warehouse && item.s_warehouse !== "") {
                     // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
                     frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
-                } else {
-                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
-                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
                 }
+
             });
         }
     }
@@ -900,10 +892,8 @@ frappe.ui.form.on('Stock Entry Detail', {
                     if (current_row.s_warehouse && current_row.s_warehouse !== "") {
                         // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
                         frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
-                    } else {
-                        // If s_warehouse is empty, set allow_zero_valuation_rate = 1
-                        frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
                     }
+
                 }
             }
             
@@ -941,15 +931,25 @@ frappe.ui.form.on('Stock Entry Detail', {
                     if (row.s_warehouse && row.s_warehouse !== "") {
                         // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
                         frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
-                    } else {
-                        // If s_warehouse is empty, set allow_zero_valuation_rate = 1
-                        frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
                     }
+
                 }
             }
         } catch (e) {
             console.error('[STOCK ENTRY DEBUG] Error in s_warehouse handler:', e);
         }
+    },
+
+    // When Allow Zero Valuation Rate is checked, clear rates immediately
+    allow_zero_valuation_rate: function(frm, cdt, cdn) {
+        var row = locals[cdt][cdn];
+        if (!row || !row.allow_zero_valuation_rate) {
+            return;
+        }
+        frappe.model.set_value(cdt, cdn, 'basic_rate', 0);
+        frappe.model.set_value(cdt, cdn, 'valuation_rate', 0);
+        frappe.model.set_value(cdt, cdn, 'basic_amount', 0);
+        frappe.model.set_value(cdt, cdn, 'amount', 0);
     },
     
     // Trigger when entire row is refreshed
@@ -965,10 +965,8 @@ frappe.ui.form.on('Stock Entry Detail', {
                 if (row.s_warehouse && row.s_warehouse !== "") {
                     // If s_warehouse is present (has warehouse), set allow_zero_valuation_rate = 0
                     frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 0);
-                } else {
-                    // If s_warehouse is empty, set allow_zero_valuation_rate = 1
-                    frappe.model.set_value(cdt, cdn, 'allow_zero_valuation_rate', 1);
                 }
+
             }
         } catch (e) {
             console.error('[STOCK ENTRY DEBUG] Error in refresh handler:', e);
