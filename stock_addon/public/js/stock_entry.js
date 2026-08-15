@@ -730,13 +730,26 @@ function show_cost_center_dialog(frm) {
                     if (r.message && r.message.items) {
                         console.log('[DEBUG] Items received:', r.message.items.length);
                         console.log('[DEBUG] First few items:', r.message.items.slice(0, 3));
+
+                        if (!r.message.items.length) {
+                            frappe.msgprint({
+                                title: __('No Items Found'),
+                                message: __(
+                                    'No stock found for the selected warehouse(s){0}. Check Cost Center / Item Group filters, or enable Include Zero Quantity Items.',
+                                    [values.cost_center ? __(' and Cost Center {0}', [values.cost_center]) : '']
+                                ),
+                                indicator: 'orange'
+                            });
+                            return;
+                        }
                         
                         if (values.clear_existing) {
                             frm.clear_table('items');
                         }
                         
+                        let added = 0;
                         r.message.items.forEach(item => {
-                            if (!(flt(item.qty) > 0)) { return; }
+                            if (!(flt(item.qty) > 0) && !values.include_zero_qty) { return; }
                             const row = frm.add_child('items');
                             row.item_code = item.item_code;
                             row.item_name = item.item_name;
@@ -752,15 +765,19 @@ function show_cost_center_dialog(frm) {
                             
                             row.basic_rate = item.rate || 0;
                             row.valuation_rate = item.valuation_rate || 0;
+                            if (item.cost_center) {
+                                row.cost_center = item.cost_center;
+                            }
                             // Ensure Qty as per Stock UOM is populated
                             row.transfer_qty = flt(row.qty) * flt(row.conversion_factor || 1);
+                            added += 1;
                         });
                         
                         frm.refresh_field('items');
                         dialog.hide();
                         
                         frappe.show_alert({
-                            message: __('{0} items added successfully', [r.message.items.length]),
+                            message: __('{0} items added successfully', [added]),
                             indicator: 'green'
                         });
                     } else {

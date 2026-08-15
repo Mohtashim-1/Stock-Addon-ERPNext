@@ -1,3 +1,5 @@
+import json
+
 import frappe
 from frappe.utils import cint, flt
 from erpnext.stock.stock_ledger import get_valuation_rate
@@ -478,133 +480,107 @@ def get_all_child_item_groups(item_group_name):
 def get_items_from_source(source_type, source, warehouses=None, cost_center=None, item_groups=None, include_zero_qty=False, company=None):
     """Get items from warehouse or sales order for Stock Entry"""
     try:
-        print(f"[DEBUG] get_items_from_source called with:")
-        print(f"  source_type: {source_type}")
-        print(f"  source: {source}")
-        print(f"  warehouses: {warehouses}")
-        print(f"  cost_center: {cost_center}")
-        print(f"  item_groups: {item_groups}")
-        print(f"  include_zero_qty: {include_zero_qty}")
-        print(f"  company: {company}")
-        
         items = []
-        
-        # Parse warehouses if it's a string
-        if isinstance(warehouses, str):
-            try:
-                warehouses = json.loads(warehouses)
-            except:
-                warehouses = [warehouses]
-        
-        # Parse item_groups if it's a string
-        if isinstance(item_groups, str):
-            try:
-                item_groups = json.loads(item_groups)
-            except:
-                item_groups = [item_groups] if item_groups else []
-        
-        print(f"[DEBUG] Parsed warehouses: {warehouses}")
-        print(f"[DEBUG] Parsed item_groups: {item_groups}")
-        
+        include_zero_qty = cint(include_zero_qty)
+
+        def _as_list(value):
+            if value in (None, "", []):
+                return []
+            if isinstance(value, str):
+                value = frappe.parse_json(value) if value.strip().startswith(("[", "{")) else value
+                if isinstance(value, str):
+                    return [value] if value else []
+            if isinstance(value, (list, tuple, set)):
+                return [v for v in value if v]
+            return [value]
+
+        warehouses = _as_list(warehouses)
+        item_groups = _as_list(item_groups)
+
         # Expand item groups to include all children
         expanded_item_groups = []
         if item_groups:
             for item_group in item_groups:
                 expanded_item_groups.append(item_group)
-                # Get all child item groups
-                child_groups = get_all_child_item_groups(item_group)
-                expanded_item_groups.extend(child_groups)
-                print(f"[DEBUG] Item group '{item_group}' has children: {child_groups}")
-            
-            # Remove duplicates
+                expanded_item_groups.extend(get_all_child_item_groups(item_group))
             expanded_item_groups = list(set(expanded_item_groups))
-            print(f"[DEBUG] Expanded item groups: {expanded_item_groups}")
-        
+
         if source_type == 'Cost Center':
-            # Get items from warehouses with optional cost center and item group filtering
+            if not warehouses:
+                frappe.throw(frappe._("Please select at least one warehouse"))
+
             bin_filters = {"warehouse": ["in", warehouses]}
-            
             if not include_zero_qty:
                 bin_filters["actual_qty"] = [">", 0]
-            
-            print(f"[DEBUG] Bin filters: {bin_filters}")
-            
-            # Get bins with items
-            bins = frappe.get_all("Bin", 
+
+            bins = frappe.get_all(
+                "Bin",
                 filters=bin_filters,
                 fields=["item_code", "actual_qty", "valuation_rate", "warehouse"],
-                order_by="item_code"
+                order_by="item_code",
             )
-            
-            print(f"[DEBUG] Found {len(bins)} bins")
-            
-            for bin in bins:
+
+            # Preload item→cost-center links for this warehouse set (child row OR parent custom_cost_center)
+            allowed_item_warehouses = None
+            if cost_center:
+                allowed_item_warehouses = set()
+                linked = frappe.db.sql(
+                    """
+                    select distinct sed.item_code, sed.s_warehouse, sed.t_warehouse
+                    from `tabStock Entry Detail` sed
+                    inner join `tabStock Entry` se on se.name = sed.parent
+                    where sed.docstatus = 1
+                      and (
+                        sed.cost_center = %(cost_center)s
+                        or se.custom_cost_center = %(cost_center)s
+                      )
+                      and (
+                        sed.s_warehouse in %(warehouses)s
+                        or sed.t_warehouse in %(warehouses)s
+                      )
+                    """,
+                    {"cost_center": cost_center, "warehouses": tuple(warehouses)},
+                    as_dict=True,
+                )
+                for row in linked:
+                    if row.s_warehouse in warehouses:
+                        allowed_item_warehouses.add((row.item_code, row.s_warehouse))
+                    if row.t_warehouse in warehouses:
+                        allowed_item_warehouses.add((row.item_code, row.t_warehouse))
+
+            for bin_row in bins:
                 try:
-                    item_doc = frappe.get_cached_doc("Item", bin.item_code)
-                    
-                    # Filter by item groups if specified (using expanded list)
+                    item_doc = frappe.get_cached_doc("Item", bin_row.item_code)
+
                     if expanded_item_groups and item_doc.item_group not in expanded_item_groups:
-                        print(f"[DEBUG] Skipping item {bin.item_code} - item_group '{item_doc.item_group}' not in {expanded_item_groups}")
                         continue
-                    
-                    # Filter by cost center if specified
-                    if cost_center:
-                        print(f"[DEBUG] Checking cost center filter for item {bin.item_code}")
-                        
-                        # Check if this item was transferred with this cost center
-                        # We need to check both source and target warehouses for stock entries
-                        stock_entries = frappe.get_all("Stock Entry Detail",
-                            filters={
-                                "item_code": bin.item_code,
-                                "cost_center": cost_center,
-                                "docstatus": 1  # Only submitted entries
-                            },
-                            fields=["name", "s_warehouse", "t_warehouse"],
-                            limit=10
-                        )
-                        
-                        print(f"[DEBUG] Found {len(stock_entries)} stock entries for item {bin.item_code} with cost center {cost_center}")
-                        
-                        # Check if any of these entries involve the current warehouse
-                        warehouse_found = False
-                        for entry in stock_entries:
-                            if entry.s_warehouse == bin.warehouse or entry.t_warehouse == bin.warehouse:
-                                warehouse_found = True
-                                print(f"[DEBUG] Item {bin.item_code} found in warehouse {bin.warehouse} with cost center {cost_center}")
-                                break
-                        
-                        if not warehouse_found:
-                            print(f"[DEBUG] Skipping item {bin.item_code} - not found in warehouse {bin.warehouse} with cost center {cost_center}")
+
+                    if allowed_item_warehouses is not None:
+                        if (bin_row.item_code, bin_row.warehouse) not in allowed_item_warehouses:
                             continue
-                    
-                    print(f"[DEBUG] Adding item {bin.item_code} with item_group '{item_doc.item_group}'")
-                    
-                    # Avoid negative quantities; clamp to zero to reflect available stock only
-                    safe_qty = bin.actual_qty if (bin.actual_qty or 0) > 0 else 0
+
+                    safe_qty = bin_row.actual_qty if (bin_row.actual_qty or 0) > 0 else 0
                     item_data = {
-                        "item_code": bin.item_code,
+                        "item_code": bin_row.item_code,
                         "item_name": item_doc.item_name,
                         "qty": safe_qty,
                         "uom": item_doc.stock_uom,
                         "stock_uom": item_doc.stock_uom,
                         "conversion_factor": 1.0,
-                        "warehouse": bin.warehouse,
-                        "rate": bin.valuation_rate,
-                        "valuation_rate": bin.valuation_rate
+                        "warehouse": bin_row.warehouse,
+                        "rate": bin_row.valuation_rate,
+                        "valuation_rate": bin_row.valuation_rate,
                     }
-                    
-                    # Add cost center to item if specified
                     if cost_center:
                         item_data["cost_center"] = cost_center
-                    
                     items.append(item_data)
-                    
-                except Exception as e:
-                    print(f"[DEBUG] Error processing item {bin.item_code}: {str(e)}")
+                except Exception:
+                    frappe.log_error(
+                        title="get_items_from_source item error",
+                        message=frappe.get_traceback(),
+                    )
                     continue
-            
-            print(f"[DEBUG] Final items count: {len(items)}")
-            
+
         elif source_type == 'Warehouse':
             # Get items from warehouse (Bin table)
             bin_filters = {"warehouse": source}
@@ -657,6 +633,5 @@ def get_items_from_source(source_type, source, warehouses=None, cost_center=None
         return {"items": items}
         
     except Exception as e:
-        print(f"[DEBUG] Error in get_items_from_source: {str(e)}")
         frappe.log_error(title="get_items_from_source error", message=frappe.get_traceback())
         frappe.throw(f"Error fetching items: {str(e)}")
