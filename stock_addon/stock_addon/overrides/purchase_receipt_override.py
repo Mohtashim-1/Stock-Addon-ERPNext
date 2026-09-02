@@ -1,17 +1,35 @@
 import frappe
-from frappe.utils import flt
+from frappe import _
+from frappe.utils import cint, flt
 from erpnext.stock.doctype.purchase_receipt.purchase_receipt import PurchaseReceipt as ERPNextPurchaseReceipt
 
 
 class PurchaseReceipt(ERPNextPurchaseReceipt):
 	def po_required(self):
-		for i in self.items:
-			allow_zero = i.allow_zero_valuation_rate
+		"""PO required for all items, except allow_zero_valuation_rate rows.
+
+		Previously this method only returned True/False and never threw, so any
+		item could be received without a Purchase Order. Only zero-valuation
+		items are allowed without PO reference.
+		"""
+		if (
+			frappe.db.get_single_value("Buying Settings", "po_required") != "Yes"
+			or self.is_internal_transfer()
+		):
+			return
+
+		for d in self.get("items"):
+			if d.purchase_order:
+				continue
+
+			allow_zero = d.allow_zero_valuation_rate
 			if allow_zero is None:
-				allow_zero = frappe.db.get_value("Item", i.item_code, "allow_zero_valuation_rate")
-			if allow_zero:
-				return False
-		return True
+				allow_zero = frappe.db.get_value("Item", d.item_code, "allow_zero_valuation_rate")
+
+			if cint(allow_zero):
+				continue
+
+			frappe.throw(_("Purchase Order number required for Item {0}").format(d.item_code))
 
 	def validate(self):
 		"""Override validate to set rate to 0 when allow_zero_valuation_rate is enabled"""
@@ -86,6 +104,3 @@ class PurchaseReceipt(ERPNextPurchaseReceipt):
 				row.received_qty,
 				update_modified=False,
 			)
-
-
-PurchaseReceipt.po_required = PurchaseReceipt.po_required
